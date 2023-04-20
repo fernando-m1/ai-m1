@@ -1,6 +1,7 @@
 langchain
 streamlit
-pydantic
+#pydantic
 google-search-results
 nltk
 tiktoken
+openai
