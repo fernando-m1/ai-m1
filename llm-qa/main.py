@@ -48,7 +48,7 @@ from langchain.agents.agent_toolkits import (
 #import magic
 import os
 import nltk
-import config
+#import config
 import inspect
 import tiktoken
 from getpass import getpass
