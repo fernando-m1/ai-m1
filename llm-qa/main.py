@@ -92,52 +92,6 @@ llmSERP=ChatOpenAI(temperature=0,
 #que le permite al chatbot mantener una conversación a la par que utiliza herramientas .
 agent_chain = initialize_agent(toolsSERP, llmSERP, agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=ConversationBufferMemory(memory_key="chat_history"))
 
-# Utilizamos DirectoryLoader para cargar los documentos fuente sobre los que entrenaremos el chatbot, en este caso, los documentos brindan conocimiento sobre Morada Uno.
-loader_m1 = DirectoryLoader('https://github.com/fernando-m1/ai-m1/tree/main/llm-qa/Demo_docs')
-
-# Extraemos el texto de los archivos PDF que cargamos.
-documents_m1 = loader_m1.load()
-
-# Aplicar RecursiveCharacterTextSplitter para partir los textos completos en pequeños trozos de texto que faciliten el trabajo al chatbot.
-text_splitterRC = RecursiveCharacterTextSplitter(
-    chunk_size = 500,  
-    chunk_overlap  = 50,
-    length_function = len
-)
-textsRC_m1 = text_splitterRC.split_documents(documents_m1)
-
-# Definitmos el modelo que utilizaremos para realizar los embeddings (conversión de texto a vectores numéricos)
-embeddings = OpenAIEmbeddings(openai_api_key=os.environ['OPENAI_API_KEY'])
-
-# Creamos el vectorstore que alojará los embeddings creados en el paso anterior.
-vectorstore_m1 = Chroma.from_documents(textsRC_m1, embeddings, metadatas=[{"source": str(i)} for i in range(len(textsRC_m1))])
-
-# Definimos el modelo de lenguaje que utilizará nuestro chatbot
-llm = OpenAI(
-    batch_size=5,
-    temperature=0,
-    openai_api_key=os.environ['OPENAI_API_KEY']
-)
-
-qa_m1 = RetrievalQA.from_chain_type(llm=llm, chain_type="refine", retriever=vectorstore_m1.as_retriever(), return_source_documents=False)
-
-from langchain.agents.react.base import DocstoreExplorer
-
-tools_m1 = [
-    Tool(
-        name="Morada Uno System",
-        func=qa_m1.run,
-        description="useful for when you need to look up information about Morada Uno"
-    ),
-    Tool(
-        name="Google Search",
-        func=Google_search.run,
-        description="useful for when you need to answer questions about current events or the current state of the world"
-    )
-]
-
-memory=ConversationBufferMemory(return_messages=True, memory_key="chat_history")
-react_chain = initialize_agent(tools_m1, llmSERP, agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION, verbose=False, memory=memory)
 
 
 
@@ -156,5 +110,5 @@ question_input = get_text()
 
 st.markdown("#### Assistant responde:")
 if question_input:
-  assistant_response = react_chain.run(input=question_input)
+  assistant_response = agent_chain.run(input=question_input)
   st.write(assistant_response)
