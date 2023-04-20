@@ -1,0 +1,6 @@
+langchain
+streamlit
+pydantic
+serpapi
+nltk
+tiktoken
