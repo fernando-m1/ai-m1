@@ -1,4 +1,5 @@
 ##### IMPORTAR LIBRERÍAS #####
+import streamlit as st
 from langchain import OpenAI, VectorDBQA, LLMChain, PromptTemplate
 from langchain.llms import OpenAI
 from langchain.llms import BaseLLM
@@ -66,6 +67,14 @@ from langchain.schema import (
     HumanMessage,
     SystemMessage
 )
+
+
+
+
+##### CÓDIGO PARA CARGAR STREAMLIT #####
+st.set_page_config(layout="wide", page_title="Chatbot M1", page_icon="🤖")
+st.title("Chatbot M1")
+st.header("Chatbot con acceso a internet")
 
 
 
