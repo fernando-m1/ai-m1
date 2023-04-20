@@ -86,8 +86,8 @@ question_input = get_text()
 
 st.markdown("#### Renata responde:")
 if question_input:
-  renata_response = llm(prompt)
-  st.write(agent_chain.run(input=question_input))
+  renata_response = agent_chain.run(input=question_input)
+  st.write(renata_response)
 
 
 ##### CHATBOT CON ACCESO A INTERNET #####
