@@ -100,7 +100,7 @@ st.set_page_config(layout="wide", page_title="Chatbot M1", page_icon="🤖")
 st.title("Chatbot M1")
 st.header("Chatbot con acceso a internet")
 
-st.markdown("### **Escribe tus preguntas a Renata, tu asesora de Morada Uno.**")
+st.markdown("### **Escribe tus preguntas a Assistant, tu asesor de Morada Uno.**")
 st.markdown("#### Tu preguntas:")
 def get_text():
   input_text = st.text_area(label="", placeholder="Escribe aquí tus preguntas...", key="question_input")
@@ -108,7 +108,7 @@ def get_text():
 
 question_input = get_text()
 
-st.markdown("#### Renata responde:")
+st.markdown("#### Assistant responde:")
 if question_input:
-  renata_response = agent_chain.run(input=question_input)
-  st.write(renata_response)
+  assistant_response = agent_chain.run(input=question_input)
+  st.write(assistant_response)
