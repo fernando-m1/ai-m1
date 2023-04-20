@@ -71,12 +71,23 @@ from langchain.schema import (
 
 
 
-##### CÓDIGO PARA CARGAR STREAMLIT #####
+##### CÓDIGO PARA CARGAR STREAMLIT DE INICIO #####
 st.set_page_config(layout="wide", page_title="Chatbot M1", page_icon="🤖")
 st.title("Chatbot M1")
 st.header("Chatbot con acceso a internet")
 
+st.markdown("### **Escribe tus preguntas a Renata, tu asesora de Morada Uno.**")
+st.markdown("#### Tu preguntas:")
+def get_text():
+  input_text = st.text_area(label="", placeholder="Escribe aquí tus preguntas...", key="question_input")
+  return input_text
 
+question_input = get_text()
+
+st.markdown("#### Renata responde:")
+if question_input:
+  renata_response = llm(prompt)
+  st.write(agent_chain.run(input=question_input))
 
 
 ##### CHATBOT CON ACCESO A INTERNET #####
