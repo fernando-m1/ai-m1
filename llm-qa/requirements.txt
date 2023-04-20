@@ -5,3 +5,4 @@ google-search-results
 nltk
 tiktoken
 openai
+chromadb
