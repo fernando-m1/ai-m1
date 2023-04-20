@@ -71,25 +71,6 @@ from langchain.schema import (
 
 
 
-##### CÓDIGO PARA CARGAR STREAMLIT DE INICIO #####
-st.set_page_config(layout="wide", page_title="Chatbot M1", page_icon="🤖")
-st.title("Chatbot M1")
-st.header("Chatbot con acceso a internet")
-
-st.markdown("### **Escribe tus preguntas a Renata, tu asesora de Morada Uno.**")
-st.markdown("#### Tu preguntas:")
-def get_text():
-  input_text = st.text_area(label="", placeholder="Escribe aquí tus preguntas...", key="question_input")
-  return input_text
-
-question_input = get_text()
-
-st.markdown("#### Renata responde:")
-if question_input:
-  renata_response = agent_chain.run(input=question_input)
-  st.write(renata_response)
-
-
 ##### CHATBOT CON ACCESO A INTERNET #####
 # Definimos las herramientas que utilizará nuestro chatbot, en este caso solo utilizará SerpAPIWrapper para realizar búsquedas en Google. 
 Google_search = SerpAPIWrapper()
@@ -110,3 +91,24 @@ llmSERP=ChatOpenAI(temperature=0,
 # Definimos la cadena de herramientas que utilizará nuestro chatbot. Los elementos clave son tools y AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
 #que le permite al chatbot mantener una conversación a la par que utiliza herramientas .
 agent_chain = initialize_agent(toolsSERP, llmSERP, agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=ConversationBufferMemory(memory_key="chat_history"))
+
+
+
+
+##### CÓDIGO PARA CARGAR STREAMLIT DE INICIO #####
+st.set_page_config(layout="wide", page_title="Chatbot M1", page_icon="🤖")
+st.title("Chatbot M1")
+st.header("Chatbot con acceso a internet")
+
+st.markdown("### **Escribe tus preguntas a Renata, tu asesora de Morada Uno.**")
+st.markdown("#### Tu preguntas:")
+def get_text():
+  input_text = st.text_area(label="", placeholder="Escribe aquí tus preguntas...", key="question_input")
+  return input_text
+
+question_input = get_text()
+
+st.markdown("#### Renata responde:")
+if question_input:
+  renata_response = agent_chain.run(input=question_input)
+  st.write(renata_response)
