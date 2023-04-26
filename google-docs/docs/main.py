@@ -15,6 +15,17 @@
 """
 Recursively extracts the text from a Google Doc.
 """
+from __future__ import print_function
+
+import os.path
+
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+
+
 import googleapiclient.discovery as discovery
 from httplib2 import Http
 from oauth2client import client
@@ -33,15 +44,7 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 ##### PRUEBA 02 - GOOGLE API PYTHON QUICKSTART #####
 
-from __future__ import print_function
 
-import os.path
-
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
 
