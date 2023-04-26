@@ -31,9 +31,9 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 
 #### AUTENTICACIÓN ####
-client_id = os.environ[CLIENT_ID],
-client_secret = os.environ[CLIENT_SECRET]
-redirect_uri = os.environ['REDIRECT_URI']
+client_id = os.environ["CLIENT_ID"],
+client_secret = os.environ["CLIENT_SECRET"]
+redirect_uri = os.environ["REDIRECT_URI"]
 
 client = GoogleOAuth2(client_id, client_secret)
 
