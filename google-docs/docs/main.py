@@ -22,6 +22,7 @@ from oauth2client import file
 from oauth2client import tools
 from httpx_oauth.oauth2 import OAuth2
 import streamlit as st
+from httpx_oauth.clients.google import GoogleOAuth2
 
 SCOPES = 'https://www.googleapis.com/auth/documents.readonly'
 DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
@@ -30,19 +31,20 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 #### AUTENTICACIÓN ####
 
-login_info = OAuth2(
-        CLIENT_ID=[CLIENT_ID],
-        CLIENT_SECRET=[CLIENT_SECRET],
-        redirect_uri=redirect_uri,
-        login_button_text="Continue with Google",
-        logout_button_text="Logout",
-    )
+client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
+#login_info = OAuth2(
+#        CLIENT_ID=[CLIENT_ID],
+#        CLIENT_SECRET=[CLIENT_SECRET],
+#        redirect_uri=redirect_uri,
+#        login_button_text="Continue with Google",
+#        logout_button_text="Logout",
+#    )
 
-if login_info:
-        user_id, user_email = login_info
-        st.write(f"Welcome {user_email}")
-else:
-        st.write("Please login")
+#if login_info:
+#        user_id, user_email = login_info
+#        st.write(f"Welcome {user_email}")
+#else:
+#        st.write("Please login")
 
 
 #### INICIA CODIGO DE GOOGLE ####
