@@ -23,6 +23,7 @@ from oauth2client import tools
 from httpx_oauth.oauth2 import OAuth2
 import streamlit as st
 from httpx_oauth.clients.google import GoogleOAuth2
+import os
 
 SCOPES = 'https://www.googleapis.com/auth/documents.readonly'
 DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
