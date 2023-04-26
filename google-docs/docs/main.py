@@ -30,12 +30,16 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 
 #### AUTENTICACIÓN ####
+client_id = os.environ[CLIENT_ID],
+client_secret = os.environ[CLIENT_SECRET]
+redirect_uri = os.environ['REDIRECT_URI']
 
-client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
+client = GoogleOAuth2(client_id, client_secret)
+
 #login_info = OAuth2(
-#        CLIENT_ID=[CLIENT_ID],
-#        CLIENT_SECRET=[CLIENT_SECRET],
-#        redirect_uri=redirect_uri,
+#        client_id = os.environ[CLIENT_ID],
+#        client_secret = os.environ[CLIENT_SECRET],
+#        redirect_uri = os.environ['REDIRECT_URI'],
 #        login_button_text="Continue with Google",
 #        logout_button_text="Logout",
 #    )
@@ -47,17 +51,56 @@ client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
 #        st.write("Please login")
 
 
-#### INICIA CODIGO DE GOOGLE ####
 
+#### CODIGO DE AUTENTICACIÓN ####
+
+async def write_authorization_url(client,
+                                  redirect_uri):
+    authorization_url = await client.get_authorization_url(
+        redirect_uri,
+        scope=["email"],
+        extras_params={"access_type": "offline"},
+    )
+    return authorization_url
+authorization_url = asyncio.run(
+    write_authorization_url(client=client,
+                            redirect_uri=redirect_uri)
+)
+st.write(f'''<h1>
+    Please login using this <a target="_self"
+    href="{authorization_url}">url</a></h1>''',
+         unsafe_allow_html=True)
+
+
+st.experimental_get_query_params()
+
+code = st.experimental_get_query_params()['code']
+
+async def write_access_token(client,
+                             redirect_uri,
+                             code):
+    token = await client.get_access_token(code, redirect_uri)
+    return token
+token = asyncio.run(
+    write_access_token(client=client,
+                       redirect_uri=redirect_uri,
+                       code=code))
+session_state.token = token
+
+
+
+#### INICIA CODIGO DE GOOGLE DOCS API ####
+
+"""
 def get_credentials():
-    """Gets valid user credentials from storage.
+    '''Gets valid user credentials from storage.
 
     If nothing has been stored, or if the stored credentials are invalid,
     the OAuth 2.0 flow is completed to obtain the new credentials.
 
     Returns:
         Credentials, the obtained credential.
-    """
+    '''
     store = file.Storage('token.json')
     credentials = store.get()
 
@@ -65,6 +108,7 @@ def get_credentials():
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         credentials = tools.run_flow(flow, store)
     return credentials
+"""
 
 def read_paragraph_element(element):
     """Returns the text in the given ParagraphElement.
