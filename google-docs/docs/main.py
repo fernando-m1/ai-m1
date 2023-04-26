@@ -37,6 +37,8 @@ from httpx_oauth.clients.google import GoogleOAuth2
 import os
 import asyncio
 
+from google.oauth2 import service_account
+
 #from dotenv import load_dotenv
 #from pyprojroot import here
 #import json
@@ -51,6 +53,15 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 # The ID of a sample document.
 #
+
+# Create a Google Authentication connection object
+
+credentials = service_account.Credentials.from_service_account_info(
+                st.secrets["credentials"], scopes = SCOPES)
+client = Client(scope=SCOPES,creds=credentials)
+#spreadsheetname = "Database"
+#spread = Spread(spreadsheetname,client = client)
+
 
 def main():
     """Shows basic usage of the Docs API.
