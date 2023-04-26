@@ -27,6 +27,25 @@ DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
 DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 
+#### AUTENTICACIÓN ####
+
+login_info = oauth.login(
+        client_id=client_id,
+        client_secret=client_secret,
+        redirect_uri=redirect_uri,
+        login_button_text="Continue with Google",
+        logout_button_text="Logout",
+    )
+
+if login_info:
+        user_id, user_email = login_info
+        st.write(f"Welcome {user_email}")
+else:
+        st.write("Please login")
+
+
+#### INICIA CODIGO DE GOOGLE ####
+
 def get_credentials():
     """Gets valid user credentials from storage.
 
@@ -115,3 +134,21 @@ st.markdown("#### El documento contiene el siguiente texto:")
 if doc_id:
   doc_text = read_structural_elements(doc_content)
   st.write(doc_text)
+
+
+
+
+
+def write_creds():
+    """ Write service account credentials to disk based on environment variables."""
+    credentials = {
+        "type": "service_account",
+        "project_id": os.getenv("GOOGLE_PROJECT_ID"),
+        "private_key_id": os.getenv("GOOGLE_PRIVATE_KEY_ID"),
+        "private_key": os.getenv("GOOGLE_PRIVATE_KEY"),
+        "client_email": os.getenv("GOOGLE_CLIENT_EMAIL"),
+        "client_id": os.getenv("GOOGLE_CLIENT_EMAIL"),
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": os.getenv("GOOGLE_CLIENT_X509_CERT_URL")
