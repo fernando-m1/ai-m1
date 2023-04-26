@@ -1,4 +1,3 @@
-git+https://github.com/hunkim/streamlit-google-oauth
 protobuf
 streamlit
 httpx-oauth
