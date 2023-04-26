@@ -47,59 +47,141 @@ SCOPES = 'https://www.googleapis.com/auth/documents.readonly'
 DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
 DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
-##### PRUEBA 02 - GOOGLE API PYTHON QUICKSTART #####
+#### AUTENTICACIÓN ####
+client_id = st.secrets["CLIENT_ID"],
+client_secret = st.secrets["CLIENT_SECRET"]
+redirect_uri = st.secrets["REDIRECT_URI"]
 
-# If modifying these scopes, delete the file token.json.
+client = GoogleOAuth2(client_id, client_secret)
 
-# The ID of a sample document.
-#
+#login_info = OAuth2(
+#        client_id = os.environ[CLIENT_ID],
+#        client_secret = os.environ[CLIENT_SECRET],
+#        redirect_uri = os.environ['REDIRECT_URI'],
+#        login_button_text="Continue with Google",
+#        logout_button_text="Logout",
+#    )
 
-# Create a Google Authentication connection object
+#if login_info:
+#        user_id, user_email = login_info
+#        st.write(f"Welcome {user_email}")
+#else:
+#        st.write("Please login")
 
-credentials = service_account.Credentials.from_service_account_info(
-                st.secrets["credentials"], scopes = SCOPES)
-client = Client(scope=SCOPES,creds=credentials)
-#spreadsheetname = "Database"
-#spread = Spread(spreadsheetname,client = client)
+
+
+#### CODIGO DE AUTENTICACIÓN ####
+
+async def write_authorization_url(client,
+                                  redirect_uri):
+    authorization_url = await client.get_authorization_url(
+        redirect_uri,
+        scope=["email"],
+        extras_params={"access_type": "offline"},
+    )
+    return authorization_url
+authorization_url = asyncio.run(
+    write_authorization_url(client=client,
+                            redirect_uri=redirect_uri)
+)
+st.write(f'''<h1>
+    Please login using this <a target="_self"
+    href="{authorization_url}">url</a></h1>''',
+         unsafe_allow_html=True)
+
+
+#st.experimental_get_query_params()
+
+code = st.experimental_get_query_params()       #['code']
+
+async def write_access_token(client,
+                             redirect_uri,
+                             code):
+    token = await client.get_access_token(code, redirect_uri)
+    return token
+token = asyncio.run(
+    write_access_token(client=client,
+                       redirect_uri=redirect_uri,
+                       code=code))
+session_state.token = token
+
+
+
+#### INICIA CODIGO DE GOOGLE DOCS API ####
+
+"""
+def get_credentials():
+    '''Gets valid user credentials from storage.
+
+    If nothing has been stored, or if the stored credentials are invalid,
+    the OAuth 2.0 flow is completed to obtain the new credentials.
+
+    Returns:
+        Credentials, the obtained credential.
+    '''
+    store = file.Storage('token.json')
+    credentials = store.get()
+
+    if not credentials or credentials.invalid:
+        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+        credentials = tools.run_flow(flow, store)
+    return credentials
+"""
+
+def read_paragraph_element(element):
+    """Returns the text in the given ParagraphElement.
+
+        Args:
+            element: a ParagraphElement from a Google Doc.
+    """
+    text_run = element.get('textRun')
+    if not text_run:
+        return ''
+    return text_run.get('content')
+
+
+def read_structural_elements(elements):
+    """Recurses through a list of Structural Elements to read a document's text where text may be
+        in nested elements.
+
+        Args:
+            elements: a list of Structural Elements.
+    """
+    text = ''
+    for value in elements:
+        if 'paragraph' in value:
+            elements = value.get('paragraph').get('elements')
+            for elem in elements:
+                text += read_paragraph_element(elem)
+        elif 'table' in value:
+            # The text in table cells are in nested Structural Elements and tables may be
+            # nested.
+            table = value.get('table')
+            for row in table.get('tableRows'):
+                cells = row.get('tableCells')
+                for cell in cells:
+                    text += read_structural_elements(cell.get('content'))
+        elif 'tableOfContents' in value:
+            # The text in the TOC is also in a Structural Element.
+            toc = value.get('tableOfContents')
+            text += read_structural_elements(toc.get('content'))
+    return text
 
 
 def main():
-    """Shows basic usage of the Docs API.
-    Prints the title of a sample document.
-    """
-    creds = st.secrets.credentials
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    '''
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-    '''
-
-    try:
-        service = build('docs', 'v1', credentials=creds)
-
-        # Retrieve the documents contents from the Docs service.
-        document = service.documents().get(documentId=DOCUMENT_ID).execute()
-
-        print('The title of the document is: {}'.format(document.get('title')))
-    except HttpError as err:
-        print(err)
-
+    """Uses the Docs API to print out the text of a document."""
+    credentials = get_credentials()
+    http = credentials.authorize(Http())
+    docs_service = discovery.build(
+        'docs', 'v1', http=http, discoveryServiceUrl=DISCOVERY_DOC)
+    doc = docs_service.documents().get(documentId=DOCUMENT_ID).execute()
+    doc_content = doc.get('body').get('content')
+    print(read_structural_elements(doc_content))
 
 if __name__ == '__main__':
     main()
+
+
 
 
 
