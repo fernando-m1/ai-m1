@@ -30,7 +30,7 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 #### AUTENTICACIÓN ####
 
-login_info = OAuth2.login(
+login_info = OAuth2(
         client_id=client_id,
         client_secret=client_secret,
         redirect_uri=redirect_uri,
