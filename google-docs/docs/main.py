@@ -76,7 +76,7 @@ st.write(f'''<h1>
 
 st.experimental_get_query_params()
 
-code = st.experimental_get_query_params()['code']
+code = st.experimental_get_query_params()       #['code']
 
 async def write_access_token(client,
                              redirect_uri,
