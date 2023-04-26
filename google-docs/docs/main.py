@@ -51,6 +51,7 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 client_id = st.secrets["CLIENT_ID"],
 client_secret = st.secrets["CLIENT_SECRET"]
 redirect_uri = st.secrets["REDIRECT_URI"]
+refreshToken = st.secrets["REFRESH_TOKEN"]
 
 client = GoogleOAuth2(client_id, client_secret)
 
@@ -58,8 +59,7 @@ client = GoogleOAuth2(client_id, client_secret)
 #        client_id = os.environ[CLIENT_ID],
 #        client_secret = os.environ[CLIENT_SECRET],
 #        redirect_uri = os.environ['REDIRECT_URI'],
-#        login_button_text="Continue with Google",
-#        logout_button_text="Logout",
+#        refreshToken = os.environ['REFRESH_TOKEN'],
 #    )
 
 #if login_info:
@@ -69,6 +69,21 @@ client = GoogleOAuth2(client_id, client_secret)
 #        st.write("Please login")
 
 
+
+'''
+credentials = (
+    type: 'service_account',
+    project_id: 'my-project',
+    private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+    private_key: process.env.GOOGLE_PRIVATE_KEY,
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+    token_uri: 'https://oauth2.googleapis.com/token',
+    auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
+    client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
+}
+'''
 
 #### CODIGO DE AUTENTICACIÓN ####
 
