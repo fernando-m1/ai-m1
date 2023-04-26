@@ -37,6 +37,10 @@ from httpx_oauth.clients.google import GoogleOAuth2
 import os
 import asyncio
 
+#from dotenv import load_dotenv
+#from pyprojroot import here
+#import json
+
 SCOPES = 'https://www.googleapis.com/auth/documents.readonly'
 DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
 DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
@@ -51,10 +55,11 @@ def main():
     """Shows basic usage of the Docs API.
     Prints the title of a sample document.
     """
-    creds = None
+    creds = st.secrets["credentials"]
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
+    '''
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     # If there are no (valid) credentials available, let the user log in.
@@ -68,6 +73,7 @@ def main():
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
+    '''
 
     try:
         service = build('docs', 'v1', credentials=creds)
