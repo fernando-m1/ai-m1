@@ -42,49 +42,7 @@ DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
 DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 
-##### PRUEBA 02 - GOOGLE API PYTHON QUICKSTART #####
 
-
-
-# If modifying these scopes, delete the file token.json.
-
-# The ID of a sample document.
-
-def main():
-    """Shows basic usage of the Docs API.
-    Prints the title of a sample document.
-    """
-    creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-
-    try:
-        service = build('docs', 'v1', credentials=creds)
-
-        # Retrieve the documents contents from the Docs service.
-        document = service.documents().get(documentId=DOCUMENT_ID).execute()
-
-        print('The title of the document is: {}'.format(document.get('title')))
-    except HttpError as err:
-        print(err)
-
-
-if __name__ == '__main__':
-    main()
 
 #### AUTENTICACIÓN ####
 client_id = os.environ["CLIENT_ID"],
@@ -207,7 +165,7 @@ def read_structural_elements(elements):
     return text
 
 
-def main01():
+def main():
     """Uses the Docs API to print out the text of a document."""
     credentials = get_credentials()
     http = credentials.authorize(Http())
@@ -217,8 +175,8 @@ def main01():
     doc_content = doc.get('body').get('content')
     print(read_structural_elements(doc_content))
 
-if __name__ == '__main01__':
-    main01()
+if __name__ == '__main__':
+    main()
 
 
 ##### CÓDIGO PARA CARGAR STREAMLIT DE INICIO #####
