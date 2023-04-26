@@ -31,8 +31,8 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 #### AUTENTICACIÓN ####
 
 login_info = OAuth2(
-        CLIENT_ID=CLIENT_ID,
-        CLIENT_SECRET=CLIENT_SECRET,
+        CLIENT_ID=[CLIENT_ID],
+        CLIENT_SECRET=[CLIENT_SECRET],
         redirect_uri=redirect_uri,
         login_button_text="Continue with Google",
         logout_button_text="Logout",
