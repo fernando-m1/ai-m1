@@ -57,7 +57,7 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 # Create a Google Authentication connection object
 
 credentials = service_account.Credentials.from_service_account_info(
-                st.secrets["service_credentials"], scopes = SCOPES)
+                st.secrets["credentials"], scopes = SCOPES)
 client = Client(scope=SCOPES,creds=credentials)
 #spreadsheetname = "Database"
 #spread = Spread(spreadsheetname,client = client)
