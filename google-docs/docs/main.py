@@ -20,6 +20,7 @@ from httplib2 import Http
 from oauth2client import client
 from oauth2client import file
 from oauth2client import tools
+from httpx_oauth.oauth2 import OAuth2
 import streamlit as st
 
 SCOPES = 'https://www.googleapis.com/auth/documents.readonly'
@@ -29,7 +30,7 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 #### AUTENTICACIÓN ####
 
-login_info = oauth.login(
+login_info = OAuth2.login(
         client_id=client_id,
         client_secret=client_secret,
         redirect_uri=redirect_uri,
