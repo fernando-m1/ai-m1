@@ -45,10 +45,14 @@ import json
 from apiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 
+import requests
+r = requests.get('https://github.com/fernando-m1/ai-m1/blob/8057dac908b57c71bb320be3b3f2875282a283d6/google-docs/docs/credentials.json')
+
+
 SCOPES = 'https://www.googleapis.com/auth/documents.readonly'
 DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
 DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
-SERVICE_ACCOUNT_FILE = 'https://github.com/fernando-m1/ai-m1/blob/8057dac908b57c71bb320be3b3f2875282a283d6/google-docs/docs/credentials.json'
+SERVICE_ACCOUNT_FILE = r.json()
 
 
 def get_credentials():
