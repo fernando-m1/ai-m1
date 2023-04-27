@@ -49,13 +49,6 @@ SCOPES = 'https://www.googleapis.com/auth/documents.readonly'
 DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
 DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
-#### AUTENTICACIÓN ####
-#client_id = st.secrets["CLIENT_ID"],
-#client_secret = st.secrets["CLIENT_SECRET"]
-#redirect_uri = st.secrets["REDIRECT_URI"]
-#refreshToken = st.secrets["REFRESH_TOKEN"]
-#client = GoogleOAuth2(client_id, client_secret)
-
 def get_credentials():
     """Gets valid user credentials from storage.
 
@@ -66,7 +59,7 @@ def get_credentials():
         Credentials, the obtained credential.
     """
     store = file.Storage('token.json')
-    credentials = store.get()
+    credentials = 'https://github.com/fernando-m1/ai-m1/blob/main/google-docs/docs/credentials.json'
 
     if not credentials or credentials.invalid:
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
