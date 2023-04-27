@@ -58,16 +58,16 @@ DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 
 credentials = {
-    type: "service_account",
-    project_id: "legal-ai-m1",
-    private_key_id: st.secrets["GOOGLE_PRIVATE_KEY_ID"],
-    private_key: st.secrets["GOOGLE_PRIVATE_KEY"],
-    client_email: st.secrets["GOOGLE_CLIENT_EMAIL"],
-    client_id: st.secrets["GOOGLE_CLIENT_ID"],
-    auth_uri: "https://accounts.google.com/o/oauth2/auth",
-    token_uri: "https://oauth2.googleapis.com/token",
-    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-    client_x509_cert_url: st.secrets["GOOGLE_CLIENT_X509_CERT_URL"]
+    "type": "service_account",
+    "project_id": "legal-ai-m1",
+    "private_key_id": st.secrets["GOOGLE_PRIVATE_KEY_ID"],
+    "private_key": st.secrets["GOOGLE_PRIVATE_KEY"],
+    "client_email": st.secrets["GOOGLE_CLIENT_EMAIL"],
+    "client_id": st.secrets["GOOGLE_CLIENT_ID"],
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": st.secrets["GOOGLE_CLIENT_X509_CERT_URL"]
 }
 
 credentials_json = json.dumps(credentials)
