@@ -41,107 +41,56 @@ from google.oauth2 import service_account
 
 #from dotenv import load_dotenv
 #from pyprojroot import here
-#import json
+import json
+from apiclient.discovery import build
+from oauth2client.service_account import ServiceAccountCredentials
 
 SCOPES = 'https://www.googleapis.com/auth/documents.readonly'
 DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
 DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 
 #### AUTENTICACIÓN ####
-client_id = st.secrets["CLIENT_ID"],
-client_secret = st.secrets["CLIENT_SECRET"]
-redirect_uri = st.secrets["REDIRECT_URI"]
-refreshToken = st.secrets["REFRESH_TOKEN"]
-
-client = GoogleOAuth2(client_id, client_secret)
-
-#login_info = OAuth2(
-#        client_id = os.environ[CLIENT_ID],
-#        client_secret = os.environ[CLIENT_SECRET],
-#        redirect_uri = os.environ['REDIRECT_URI'],
-#        refreshToken = os.environ['REFRESH_TOKEN'],
-#    )
-
-#if login_info:
-#        user_id, user_email = login_info
-#        st.write(f"Welcome {user_email}")
-#else:
-#        st.write("Please login")
+#client_id = st.secrets["CLIENT_ID"],
+#client_secret = st.secrets["CLIENT_SECRET"]
+#redirect_uri = st.secrets["REDIRECT_URI"]
+#refreshToken = st.secrets["REFRESH_TOKEN"]
+#client = GoogleOAuth2(client_id, client_secret)
 
 
-
-'''
-credentials = (
-    type: 'service_account',
-    project_id: 'my-project',
-    private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
-    private_key: process.env.GOOGLE_PRIVATE_KEY,
-    client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    auth_uri: 'https://accounts.google.com/o/oauth2/auth',
-    token_uri: 'https://oauth2.googleapis.com/token',
-    auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
-    client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
+credentials = {
+    type: "service_account",
+    project_id: "legal-ai-m1",
+    private_key_id: st.secrets["GOOGLE_PRIVATE_KEY_ID"],
+    private_key: st.secrets["GOOGLE_PRIVATE_KEY"],
+    client_email: st.secrets["GOOGLE_CLIENT_EMAIL"],
+    client_id: st.secrets["GOOGLE_CLIENT_ID"],
+    auth_uri: "https://accounts.google.com/o/oauth2/auth",
+    token_uri: "https://oauth2.googleapis.com/token",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+    client_x509_cert_url: st.secrets["GOOGLE_CLIENT_X509_CERT_URL"]
 }
-'''
 
-#### CODIGO DE AUTENTICACIÓN ####
-
-async def write_authorization_url(client,
-                                  redirect_uri):
-    authorization_url = await client.get_authorization_url(
-        redirect_uri,
-        scope=["email"],
-        extras_params={"access_type": "offline"},
-    )
-    return authorization_url
-authorization_url = asyncio.run(
-    write_authorization_url(client=client,
-                            redirect_uri=redirect_uri)
-)
-st.write(f'''<h1>
-    Please login using this <a target="_self"
-    href="{authorization_url}">url</a></h1>''',
-         unsafe_allow_html=True)
+credentials_json = json.dumps(credentials)
+with open('credentials.json', 'w') as outfile:
+    json.dump(credentials_json, outfile)
 
 
-#st.experimental_get_query_params()
-
-code = st.experimental_get_query_params()       #['code']
-
-async def write_access_token(client,
-                             redirect_uri,
-                             code):
-    token = await client.get_access_token(code, redirect_uri)
-    return token
-token = asyncio.run(
-    write_access_token(client=client,
-                       redirect_uri=redirect_uri,
-                       code=code))
-session_state.token = token
-
-
-
-#### INICIA CODIGO DE GOOGLE DOCS API ####
-
-"""
 def get_credentials():
-    '''Gets valid user credentials from storage.
+    """Gets valid user credentials from storage.
 
     If nothing has been stored, or if the stored credentials are invalid,
     the OAuth 2.0 flow is completed to obtain the new credentials.
 
     Returns:
         Credentials, the obtained credential.
-    '''
+    """
     store = file.Storage('token.json')
     credentials = store.get()
 
     if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+        flow = client.flow_from_clientsecrets('credentials_json.json', SCOPES)
         credentials = tools.run_flow(flow, store)
     return credentials
-"""
 
 def read_paragraph_element(element):
     """Returns the text in the given ParagraphElement.
@@ -195,10 +144,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
 
 ##### CÓDIGO PARA CARGAR STREAMLIT DE INICIO #####
 st.set_page_config(layout="wide", page_title="Colector de Texto | Google Docs", page_icon="📄")
