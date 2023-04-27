@@ -54,12 +54,6 @@ DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
 DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
 SERVICE_ACCOUNT_FILE = response.json()
 
-json_file_path = "/path/to/example.json"
-
-with open(json_file_path, 'r') as j:
-     contents = json.loads(j.read())
-
-
 def get_credentials():
     """Gets valid user credentials from storage.
 
