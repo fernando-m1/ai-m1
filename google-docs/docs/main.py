@@ -59,11 +59,11 @@ def get_credentials():
         Credentials, the obtained credential.
     """
     store = file.Storage('token.json')
-    credentials = 'https://github.com/fernando-m1/ai-m1/blob/main/google-docs/docs/credentials.json'
+    credentials = Credentials.from_authorized_user_file('https://github.com/fernando-m1/ai-m1/blob/main/google-docs/docs/credentials.json')
 
-    if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
-        credentials = tools.run_flow(flow, store)
+    #if not credentials or credentials.invalid:
+    #    flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+    #    credentials = tools.run_flow(flow, store)
     return credentials
 
 def read_paragraph_element(element):
