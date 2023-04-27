@@ -48,7 +48,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 SCOPES = 'https://www.googleapis.com/auth/documents.readonly'
 DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
 DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'
-SERVICE_ACCOUNT_FILE = 'https://github.com/fernando-m1/ai-m1/blob/main/google-docs/docs/credentials.json'
+SERVICE_ACCOUNT_FILE = 'https://raw.githubusercontent.com/fernando-m1/ai-m1/main/google-docs/docs/credentials.json'
 
 
 def get_credentials():
@@ -61,7 +61,7 @@ def get_credentials():
         Credentials, the obtained credential.
     """
     store = file.Storage('token.json')
-    #credentials = Credentials.from_authorized_user_file('https://github.com/fernando-m1/ai-m1/blob/main/google-docs/docs/credentials.json')
+    #credentials = Credentials.from_authorized_user_file('https://raw.githubusercontent.com/fernando-m1/ai-m1/main/google-docs/docs/credentials.json')
     credentials = service_account.Credentials.from_service_account_file(
         SERVICE_ACCOUNT_FILE, scopes=SCOPES)
     
