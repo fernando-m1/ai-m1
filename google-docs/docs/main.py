@@ -72,7 +72,7 @@ credentials = {
 
 credentials_json = json.dumps(credentials)
 with open('credentials.json', 'w') as outfile:
-    json.dump(credentials_json, outfile)
+    json.dump(credentials, outfile)
 
 
 def get_credentials():
@@ -88,7 +88,7 @@ def get_credentials():
     credentials = store.get()
 
     if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets('credentials_json.json', SCOPES)
+        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         credentials = tools.run_flow(flow, store)
     return credentials
 
