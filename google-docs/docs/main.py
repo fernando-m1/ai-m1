@@ -49,8 +49,11 @@ from oauth2client.service_account import ServiceAccountCredentials
 import requests
 response = requests.get('https://raw.githubusercontent.com/fernando-m1/ai-m1/main/google-docs/docs/credentials.json')
 jsonfile = urllib.request.urlopen('https://raw.githubusercontent.com/fernando-m1/ai-m1/main/google-docs/docs/credentials.json')
-filename = with open('credentials.json', 'r', encoding='utf-8') as file2:
-    lines = file2.readlines()
+#filename = with open('credentials.json', 'r', encoding='utf-8') as file2:
+#    lines = file2.readlines()
+
+filename = with open('credentials.json', 'w') as jsonFile:
+json.dump(json_decoded,jsonFile)
 
 SCOPES = 'https://www.googleapis.com/auth/documents.readonly'
 DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
