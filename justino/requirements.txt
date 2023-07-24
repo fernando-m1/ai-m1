@@ -1,4 +1,3 @@
-os
 requests
 sys
 streamlit
