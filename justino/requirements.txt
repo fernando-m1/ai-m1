@@ -1,0 +1,11 @@
+os
+requests
+sys
+streamlit
+google.auth.transport.requests
+google.oauth2.credentials
+google_auth_oauthlib.flow
+googleapiclient.discovery
+re
+typing
+langchain
