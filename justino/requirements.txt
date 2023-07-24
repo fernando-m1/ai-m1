@@ -1,5 +1,4 @@
 requests
-sys
 streamlit
 google.auth.transport.requests
 google.oauth2.credentials
