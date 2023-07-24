@@ -48,14 +48,14 @@ import requests
 import urllib.request
 
 # GitHub file URL
-file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Corpus_de_informacion.csv"
+file_url = "https://github.com/fernando-m1/ai-m1/blob/main/justino/credentials.json"
 
 # Send a GET request to download the file
-response = requests.get(file_url)
+credentials_json = requests.get(file_url)
 
 # Save the file locally
-with open("Corpus_de_informacion.csv", "wb") as file:
-    file.write(response.content)
+with open("credentials.json", "wb") as file:
+    file.write(credentials_json.content)
 
 #AGREGADO PARA IMAGENES
 from PIL import Image
