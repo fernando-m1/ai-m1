@@ -1,7 +1,5 @@
 requests
 streamlit
-google_auth_oauthlib.flow
-googleapiclient.discovery
 re
 typing
 langchain
