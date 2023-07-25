@@ -5,6 +5,7 @@ from streamlit_chat import message
 from langchain.chains import ConversationChain
 from langchain.llms import OpenAI
 
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
 def load_chain():
     """Logic for loading the chain you want to use should go here."""
