@@ -3,3 +3,4 @@ openai
 streamlit
 streamlit-chat
 requests
+google-auth
