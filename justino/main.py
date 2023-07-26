@@ -51,6 +51,19 @@ def read_paragraph_element(element):
         return ''
     return text_run.get('content')
 
+def read_paragraph_element_style(element):
+    """Returns the text style in the given ParagraphElement.
+
+        Args:
+            element: a ParagraphElement from a Google Doc.
+    """
+    text_run = element.get('textRun')
+    if not text_run:
+        return ''
+    textRun = text_run.get('textRun')
+    textStyle = textRun.get('textStyle')
+    return textStyle
+
 def read_structural_elements(elements):
     """Recurses through a list of Structural Elements to read a document's text where text may be
         in nested elements.
@@ -78,7 +91,54 @@ def read_structural_elements(elements):
             text += read_structural_elements(toc.get('content'))
     return text
 
+def extract_text_elements(elements):
+    """Recurses through a list of Structural Elements to extract text elements.
+
+        Args:
+            elements: a list of Structural Elements.
+    """
+    text_elements = []
+    for value in elements:
+        if 'paragraph' in value:
+            elements = value.get('paragraph').get('elements')
+            for elem in elements:
+                if 'textRun' in elem:
+                    text_element = {
+                        'startIndex': elem.get('startIndex'),
+                        'endIndex': elem.get('endIndex'),
+                        'content': elem.get('textRun').get('content'),
+                        'textStyle': elem.get('textRun').get('textStyle'),
+                    }
+                    text_elements.append(text_element)
+        elif 'table' in value:
+            # The text elements in table cells are in nested Structural Elements and tables may be
+            # nested.
+            table = value.get('table')
+            for row in table.get('tableRows'):
+                cells = row.get('tableCells')
+                for cell in cells:
+                    text_elements += extract_text_elements(cell.get('content'))
+        elif 'tableOfContents' in value:
+            # The text elements in the TOC are also in a Structural Element.
+            toc = value.get('tableOfContents')
+            text_elements += extract_text_elements(toc.get('content'))
+    return text_elements
+
+# Extract the complete text from the specified Google Doc.
+def read_gdocs_style():
+    """Uses the Docs API to print out the text of a document."""
+    credentials = get_credentials()
+    #http = credentials.authorize(Http())
+    docs_service = discovery.build(
+        'docs', 'v1', credentials=credentials, discoveryServiceUrl=DISCOVERY_DOC)
+    doc = docs_service.documents().get(documentId=DOCUMENT_ID).execute()
+    doc_content = doc.get('body').get('content')
+    #textStyle = extract_text_style(doc_content)
+    return doc_content
+
 doc_content = read_gdocs_style()
+
+doc_elements = extract_text_elements(doc_content)
 
 text = read_structural_elements(doc_content)
 
