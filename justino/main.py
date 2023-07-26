@@ -5,6 +5,10 @@ import os.path
 import os
 import requests
 import sys
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+import googleapiclient.discovery as discovery
 
 from langchain.chains import ConversationChain
 from langchain.llms import OpenAI
