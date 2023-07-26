@@ -2,6 +2,7 @@ langchain
 openai
 streamlit
 streamlit-chat
+requests
 google-auth
 google-oauth2
 google-auth-oauthlib
