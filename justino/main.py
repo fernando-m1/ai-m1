@@ -9,11 +9,16 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 import googleapiclient.discovery as discovery
+import json
 
 from langchain.chains import ConversationChain
 from langchain.llms import OpenAI
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+
+json_url = 'https://raw.githubusercontent.com/fernando-m1/ai-m1/main/justino/credentials.json?token=GHSAT0AAAAAACBL76C7RXSLVQDNTHWUSJA6ZGBQXMQ'    
+response = requests.get(json_url)
+credentials_data = json.loads(response.text)
 
 # Set Google Docs API environment variables
 
@@ -41,7 +46,7 @@ def get_credentials():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                credentials_data, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
