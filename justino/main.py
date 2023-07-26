@@ -16,10 +16,6 @@ from langchain.llms import OpenAI
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
-json_url = 'https://raw.githubusercontent.com/fernando-m1/ai-m1/main/justino/credentials.json?token=GHSAT0AAAAAACBL76C7RXSLVQDNTHWUSJA6ZGBQXMQ'    
-response = requests.get(json_url)
-credentials_data = json.loads(response.text)
-
 # Set Google Docs API environment variables
 
 # If modifying these scopes, delete the file token.json.
@@ -28,6 +24,18 @@ DISCOVERY_DOC = 'https://docs.googleapis.com/$discovery/rest?version=v1'
 
 # The Document ID of the contract agreement to work with.
 DOCUMENT_ID = '1SwVlU6ZKArnW9pfEQCi5YmaMPr2TkSrseRd-0PQ5Ys0'    # NECESITAMOS CAMBIAR AQUÍ PARA QUE LA BASE DE DATOS ALIMENTE ESTE VALOR
+
+cred_data = {
+	"installed": {
+		"client_id": st.secrets["CLIENT_ID"],
+		"project_id": st.secrets["PROJECT_ID"],
+		"auth_uri": st.secrets["AUTH_URI"],
+		"token_uri": st.secrets["TOKEN_URI"],
+		"auth_provider_x509_cert_url": st.secrets["AUTH_PROVIDER_X509_CERT_URL"],
+		"client_secret": st.secrets["CLIENT_SECRETS"],
+		"redirect_uris": ["http://localhost"]
+	}
+}
 
 ### GOOGLE DOCS TEXT ###
 
