@@ -1,6 +1,10 @@
 """Python file to serve as the frontend"""
 import streamlit as st
 from streamlit_chat import message
+import os.path
+import os
+import requests
+import sys
 
 from langchain.chains import ConversationChain
 from langchain.llms import OpenAI
