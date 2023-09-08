@@ -6,3 +6,4 @@ openai
 tiktoken
 faiss-cpu
 google-cloud-storage
+unstructured
