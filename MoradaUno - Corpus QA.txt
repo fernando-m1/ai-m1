@@ -1,6 +1,3 @@
-﻿Morada Uno
-
-
 ¿Qué es Morada Uno?
 Morada Uno es una empresa mexicana de tecnología, que tiene la misión de empoderar a los profesionales inmobiliarios para lograr transacciones más rápidas y seguras. En Morada Uno solucionamos los problemas existentes en el mundo de las rentas, fomentando confianza en cada operación y liquidez para todo el mercado. Nuestro compromiso es brindar a los arrendadores, arrendatarios y profesionales inmobiliarios la experiencia de renta más confiable, flexible y segura.
 Nuestros productos
@@ -52,10 +49,15 @@ Fuentes internacionales:
 * International Criminal Court
 * SEC
 * Lista de Terroristas de la Unión Europea
+
 Protección de arrendamiento
 La protección de arrendamiento que ofrece Morada Uno brinda a sus clientes toda la protección de una póliza jurídica, más la certeza de recibir siempre el pago de su renta puntual. Las protecciones de arrendamiento de Morada Uno incluyen investigación del inquilino titular, inquilino adicional, fiador y obligado solidario; elaboración de contratos, acompañamiento legal y gestión de firma; cobertura financiera para pago de rentas garantizadas; y recuperación del inmueble. El costo mínimo de contratación de cualquier protección de arrendamiento es de $3,600 pesos, más IVA.
+
+
 Protección de arrendamiento M3:
 Garantizamos el 100% del valor de la renta mensual, con una cobertura de pago por 3 meses de rentas en cualquier punto del contrato, el precio de la garantía M3 es del equivale al 30% de un mes de renta, más IVA.
+
+
 Protección de arrendamiento M12: 
 Garantizamos el 100% del valor de la renta mensual, con una cobertura de pago por los 12 meses de renta del contrato, el precio de la garantía M12 es del equivale al 60% de un mes de renta, más IVA.
 
@@ -93,6 +95,8 @@ Todas las protecciones de arrendamiento de Morada Uno incluyen:
    * Gastos de lanzamiento
    * Honorarios jurídicos
    * Gastos legales de procesos jurídicos
+
+
 Seguro de Daños al Inmueble
 ¡Protege el inmueble en renta ante mal uso o siniestros!
 ¿Qué incluye el Seguro de Daños? El Seguro de Daños protege contra daños generados al inmueble, daños de responsabilidad civil, daños ocasionados al mobiliario (es necesario firmar inventario entregado en arrendamiento) y daños por incendios o explosión.
@@ -101,8 +105,12 @@ Prima anual: la prima anual es el precio del seguro de daños, equivale al 1% de
 Suma asegurada: el seguro de daños cubre siniestros por un monto máximo de cinco veces el valor de renta mensual. Excepto en caso de incendios o explosión, en donde el seguro de daños cubre hasta un millón de pesos.
 Deducible: el seguro de daños incluye un deducible a pagar en caso de un siniestro, el deducible equivalente a un mes de renta. En otras palabras, el arrendador ya cuenta con el deducible, es el depósito en garantía que recibe al inicio del arrendamiento.
 Aseguradora: el seguro de daños está respaldado por GMX Seguros.
+
+
 Convenio de Justicia Alternativa
 Morada Uno, Centro Privado de Justicia Alternativa #315, ofrece el único servicio de justicia alternativa exclusiva para profesionales inmobiliarios. Los convenios de justicia alternativa se equiparan a sentencia ejecutoriada, dando a tus clientes la mayor certeza jurídica. El servicio de justicia alternativa es un servicio que Morada Uno ofrece exclusivamente para inmuebles ubicados en el estado de Jalisco.
+
+
 Tecnología para tu inmobiliaria
 Morada Uno desarrolla tecnología para profesionales inmobiliarios.
 ¿Qué tecnologías ofrece Morada Uno para inmobiliarias?
@@ -110,6 +118,8 @@ Investigación de inquilinos: recolecta la información de tus prospectos de for
 Firma electrónica avanzada: firma tus contratos de renta desde la comodidad de tu casa, con la mayor protección.
 Contratos de arrendamiento automatizados: ya no tienes que esperar a tus abogados; Morada Uno pone a tu disposición diferentes formatos de contrato de arrendamiento para que elabores tus contratos de forma inmediata, completamente personalizables a cada operación.
 Administración de la cobranza: olvídate de llamadas incómodas y de recodarle a tus inquilinos que paguen su renta. Morada Uno cobra la renta por ti, mientras tu inmobiliaria genera mayores ingresos ofreciendo servicio de administración.
+
+
 Asociaciones y afiliaciones
 Morada Uno se encuentra afiliado y colabora con las mejores asociaciones del sector inmobiliario:
 * AMPI (Asociación Mexicana de Profesionales Inmobiliarios)
@@ -119,4 +129,3 @@ Morada Uno se encuentra afiliado y colabora con las mejores asociaciones del sec
 * MIO (Movimiento Inmobiliario de Occidente)
 * IJA (Instituto de Justicia Alternativa del Estado de Jalisco)
 * …y muchas más.
-________________
