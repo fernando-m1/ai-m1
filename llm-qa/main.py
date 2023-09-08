@@ -33,8 +33,6 @@ st.set_page_config(
 @st.cache_resource(ttl="1h")
 def configure_retriever():
     loader = GCSFileLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", blob="moradauno_corpus-qa.txt")
-    print(f"Loading from URL: {loader.url}")
-    st.write(f"Loading from URL: {loader.url}")
         
     # Load documents from loader
     raw_documents = loader.load()
