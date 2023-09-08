@@ -19,18 +19,18 @@ from langsmith import Client
 client = Client()
 
 st.set_page_config(
-    page_title="ChatLangChain",
-    page_icon="🦜",
+    page_title="Morada Uno",
+    page_icon="🤖",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
-"# Chat🦜🔗"
+"# Chat 🤖"
 
 
 @st.cache_resource(ttl="1h")
 def configure_retriever():
-    loader = RecursiveUrlLoader("https://docs.smith.langchain.com/")
+    loader = RecursiveUrlLoader("https://raw.githubusercontent.com/fernando-m1/ai-m1/main/MoradaUno%20-%20Corpus%20QA.txt?token=GHSAT0AAAAAACBL76C7C35LFHX4LZISQBWYZH3NBJA")
     raw_documents = loader.load()
     docs = Html2TextTransformer().transform_documents(raw_documents)
     text_splitter = RecursiveCharacterTextSplitter(
@@ -45,15 +45,15 @@ def configure_retriever():
 
 tool = create_retriever_tool(
     configure_retriever(),
-    "search_langsmith_docs",
-    "Searches and returns documents regarding LangSmith. LangSmith is a platform for debugging, testing, evaluating, and monitoring LLM applications. You do not know anything about LangSmith, so if you are ever asked about LangSmith you should use this tool.",
+    "search_moradauno_info",
+    "Searches and returns documents regarding Morada Uno. Morada Uno is a Mexican technology startup, which has the mission of empowering real estate professionals to close faster and safer transactions. You do not know anything about Morada Uno, so if you are ever asked about Morada Uno you should use this tool.",
 )
 tools = [tool]
 llm = ChatOpenAI(temperature=0, streaming=True, model="gpt-4")
 message = SystemMessage(
     content=(
-        "You are a helpful chatbot who is tasked with answering questions about LangSmith. "
-        "Unless otherwise explicitly stated, it is probably fair to assume that questions are about LangSmith. "
+        "You are a helpful chatbot who is tasked with answering questions about Morada Uno. "
+        "Unless otherwise explicitly stated, it is probably fair to assume that questions are about Morada Uno. "
         "If there is any ambiguity, you probably assume they are about that."
     )
 )
@@ -69,7 +69,7 @@ agent_executor = AgentExecutor(
     return_intermediate_steps=True,
 )
 memory = AgentTokenBufferMemory(llm=llm)
-starter_message = "Ask me anything about LangSmith!"
+starter_message = "¡Pregúntame sobre Morada Uno! Estoy para resolver tus dudas sobre nuestros servicios."
 if "messages" not in st.session_state or st.sidebar.button("Clear message history"):
     st.session_state["messages"] = [AIMessage(content=starter_message)]
 
