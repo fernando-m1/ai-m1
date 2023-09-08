@@ -1,8 +1,7 @@
 langchain
 streamlit
-#pydantic
-google-search-results
-nltk
-tiktoken
+bs4
+html2text
 openai
-chromadb
+tiktoken
+faiss-cpu
