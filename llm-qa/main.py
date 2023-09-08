@@ -32,9 +32,14 @@ st.set_page_config(
 def configure_retriever():
     loader = RecursiveUrlLoader("https://raw.githubusercontent.com/fernando-m1/ai-m1/main/MoradaUno%20-%20Corpus%20QA.txt?token=GHSAT0AAAAAACBL76C7C35LFHX4LZISQBWYZH3NBJA")
     
-    print("Loading documents...")
+    # Load documents
     raw_documents = loader.load()
-    print(f"Raw documents: {len(raw_documents)}")
+    print(f"Raw documents count: {len(raw_documents)}")
+    st.write(f"Raw documents count: {len(raw_documents)}")
+    print("Raw sample:")
+    st.write("Raw sample:")
+    print(raw_documents[0])
+    st.write(raw_documents[0])
     
     docs = Html2TextTransformer().transform_documents(raw_documents)
     print(f"Transformed documents: {len(docs)}")
