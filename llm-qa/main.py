@@ -33,12 +33,16 @@ def configure_retriever():
     loader = RecursiveUrlLoader("https://raw.githubusercontent.com/fernando-m1/ai-m1/main/MoradaUno%20-%20Corpus%20QA.txt?token=GHSAT0AAAAAACBL76C7C35LFHX4LZISQBWYZH3NBJA")
     raw_documents = loader.load()
     docs = Html2TextTransformer().transform_documents(raw_documents)
+    print(len(docs))
+    print(docs)
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
         chunk_overlap=200,
     )
     documents = text_splitter.split_documents(docs)
+    print(len(documents))
     embeddings = OpenAIEmbeddings()
+    print(len(embeddings))
     vectorstore = FAISS.from_documents(documents, embeddings)
     return vectorstore.as_retriever(search_kwargs={"k": 4})
 
