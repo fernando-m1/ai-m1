@@ -35,8 +35,6 @@ def configure_retriever():
     print(f"Loading from URL: {loader.url}")
     st.write(f"Loading from URL: {loader.url}")
 
-    loader1 = UnstructuredHTMLLoader("https://raw.githubusercontent.com/fernando-m1/ai-m1/main/MoradaUno%20-%20Corpus%20QA.txt?token=GHSAT0AAAAAACBL76C7C35LFHX4LZISQBWYZH3NBJA")
-
     loader2 = StringLoader("Hello world!")
         
     # Load documents from loader
@@ -47,15 +45,6 @@ def configure_retriever():
     st.write("Raw sample:")
     print(raw_documents[0])
     st.write(raw_documents[0])
-
-    # Load documents from loader 1
-    raw_documents1 = loader1.load()
-    print(f"Raw documents 1 count: {len(raw_documents1)}")
-    st.write(f"Raw documents 1 count: {len(raw_documents1)}")
-    print("Raw sample 1:")
-    st.write("Raw sample 1:")
-    print(raw_documents1[0])
-    st.write(raw_documents1[0])
 
     # Load documents from loader 2
     raw_documents2 = loader2.load()
