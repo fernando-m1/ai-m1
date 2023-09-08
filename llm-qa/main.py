@@ -52,9 +52,6 @@ def configure_retriever():
     st.write(f"Split documents: {len(documents)}")
     
     embeddings = OpenAIEmbeddings()
-    print("Generating embeddings...")
-    embeddings_list = embeddings(documents)
-    print(f"Embeddings: {len(embeddings_list)}")
     
     vectorstore = FAISS.from_documents(documents, embeddings)
     return vectorstore.as_retriever(search_kwargs={"k": 4})
