@@ -35,13 +35,13 @@ def configure_retriever():
     loader = GCSFileLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", blob="moradauno_corpus-qa.txt")
         
     # Load documents from loader
-    raw_documents = loader.load()
-    print(f"Raw documents count: {len(raw_documents)}")
-    st.write(f"Raw documents count: {len(raw_documents)}")
+    docs = loader.load()
+    print(f"Raw documents count: {len(docs)}")
+    st.write(f"Raw documents count: {len(docs)}")
     print("Raw sample:")
     st.write("Raw sample:")
-    print(raw_documents[0])
-    st.write(raw_documents[0])
+    print(docs[0])
+    st.write(docs[0])
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
