@@ -36,23 +36,12 @@ def configure_retriever():
         
     # Load documents from loader
     docs = loader.load()
-    print(f"Raw documents count: {len(docs)}")
-    st.write(f"Raw documents count: {len(docs)}")
-    print("Raw sample:")
-    st.write("Raw sample:")
-    print(docs[0])
-    st.write(docs[0])
-
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
         chunk_overlap=200,
     )
     documents = text_splitter.split_documents(docs)
-    print(f"Split documents: {len(documents)}")
-    st.write(f"Split documents: {len(documents)}")
-    
     embeddings = OpenAIEmbeddings()
-    
     vectorstore = FAISS.from_documents(documents, embeddings)
     return vectorstore.as_retriever(search_kwargs={"k": 4})
 
@@ -114,13 +103,3 @@ if prompt := st.chat_input(placeholder=starter_message):
         memory.save_context({"input": prompt}, response)
         st.session_state["messages"] = memory.buffer
         run_id = response["__run"].run_id
-
-        col_blank, col_text, col1, col2 = st.columns([10, 2, 1, 1])
-        with col_text:
-            st.text("Feedback:")
-
-        with col1:
-            st.button("👍", on_click=send_feedback, args=(run_id, 1))
-
-        with col2:
-            st.button("👎", on_click=send_feedback, args=(run_id, 0))
