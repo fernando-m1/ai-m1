@@ -5,4 +5,4 @@ html2text
 openai
 tiktoken
 faiss-cpu
-pip install google-cloud-storag
+google-cloud-storag
