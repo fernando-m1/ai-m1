@@ -43,13 +43,6 @@ def configure_retriever():
     print(raw_documents[0])
     st.write(raw_documents[0])
 
- 
-    docs = Html2TextTransformer().transform_documents(raw_documents)
-    print(f"Transformed documents: {len(docs)}")
-    st.write(f"Transformed documents: {len(docs)}")
-    print(f"Sample doc: {docs[0][:75]}")
-    st.write(f"Sample doc: {docs[0][:75]}")
-    
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
         chunk_overlap=200,
