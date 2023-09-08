@@ -43,7 +43,9 @@ def configure_retriever():
     
     docs = Html2TextTransformer().transform_documents(raw_documents)
     print(f"Transformed documents: {len(docs)}")
+    st.write(f"Transformed documents: {len(docs)}")
     print(f"Sample doc: {docs[0][:75]}")
+    st.write(f"Sample doc: {docs[0][:75]}")
     
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
@@ -51,6 +53,7 @@ def configure_retriever():
     )
     documents = text_splitter.split_documents(docs)
     print(f"Split documents: {len(documents)}")
+    st.write(f"Split documents: {len(documents)}")
     
     embeddings = OpenAIEmbeddings()
     print("Generating embeddings...")
