@@ -1,6 +1,7 @@
 import streamlit as st
 
 from langchain.document_loaders import RecursiveUrlLoader
+from langchain.document_loaders import UnstructuredHTMLLoader
 from langchain.document_transformers import Html2TextTransformer
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -31,8 +32,14 @@ st.set_page_config(
 @st.cache_resource(ttl="1h")
 def configure_retriever():
     loader = RecursiveUrlLoader("https://raw.githubusercontent.com/fernando-m1/ai-m1/main/MoradaUno%20-%20Corpus%20QA.txt?token=GHSAT0AAAAAACBL76C7C35LFHX4LZISQBWYZH3NBJA")
-    
-    # Load documents
+    print(f"Loading from URL: {loader.url}")
+    st.write(f"Loading from URL: {loader.url}")
+
+    loader1 = UnstructuredHTMLLoader("https://raw.githubusercontent.com/fernando-m1/ai-m1/main/MoradaUno%20-%20Corpus%20QA.txt?token=GHSAT0AAAAAACBL76C7C35LFHX4LZISQBWYZH3NBJA")
+
+    loader2 = StringLoader("Hello world!")
+        
+    # Load documents from loader
     raw_documents = loader.load()
     print(f"Raw documents count: {len(raw_documents)}")
     st.write(f"Raw documents count: {len(raw_documents)}")
@@ -40,6 +47,24 @@ def configure_retriever():
     st.write("Raw sample:")
     print(raw_documents[0])
     st.write(raw_documents[0])
+
+    # Load documents from loader 1
+    raw_documents1 = loader1.load()
+    print(f"Raw documents 1 count: {len(raw_documents1)}")
+    st.write(f"Raw documents 1 count: {len(raw_documents1)}")
+    print("Raw sample 1:")
+    st.write("Raw sample 1:")
+    print(raw_documents1[0])
+    st.write(raw_documents1[0])
+
+    # Load documents from loader 2
+    raw_documents2 = loader2.load()
+    print(f"Raw documents 2 count: {len(raw_documents2)}")
+    st.write(f"Raw documents 2 count: {len(raw_documents2)}")
+    print("Raw sample2 :")
+    st.write("Raw sample2 :")
+    print(raw_documents2[0])
+    st.write(raw_documents2[0])
     
     docs = Html2TextTransformer().transform_documents(raw_documents)
     print(f"Transformed documents: {len(docs)}")
