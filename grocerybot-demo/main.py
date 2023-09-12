@@ -6,6 +6,9 @@ from typing import Any, Iterator, List
 import os
 import json
 import tempfile
+import requests
+import base64
+
 
 from langchain.agents import AgentType, initialize_agent
 from langchain.document_loaders import TextLoader
@@ -108,8 +111,51 @@ def create_retriever(top_k_results: int, dir_path: str) -> VectorStoreRetriever:
     retriever = db.as_retriever(search_kwargs={"k": top_k_results})
     return retriever
 
-recipe_retriever = create_retriever(top_k_results=2, dir_path="./recipes/*")
-product_retriever = create_retriever(top_k_results=5, dir_path="./products/*")
+###
+def download_github_files_to_temp_dir(api_url: str, folder_name: str) -> str:
+    # Make the API request to get the list of files in the GitHub folder
+    response = requests.get(api_url)
+    if response.status_code != 200:
+        raise Exception(f"Failed to get files from GitHub: {response.content}")
+
+    tree = json.loads(response.content)['tree']
+
+    # Create a temporary directory to store the downloaded files
+    temp_dir = tempfile.mkdtemp()
+
+    # Loop through each file in the GitHub folder
+    for file in tree:
+        if folder_name in file['path']:
+            file_url = file['url']
+            file_name = file['path'].split('/')[-1]
+
+            # Download the file content
+            file_response = requests.get(file_url)
+            if file_response.status_code != 200:
+                raise Exception(f"Failed to download file {file_name} from GitHub: {file_response.content}")
+
+            file_content = base64.b64decode(json.loads(file_response.content)['content'])
+
+            # Save the file to the temporary directory
+            with open(f'{temp_dir}/{file_name}', 'wb') as f:
+                f.write(file_content)
+
+    return temp_dir
+
+# Download 'recipes' folder files into a temporary directory and create the 'recipe_retriever'.
+recipes_temp_dir = download_github_files_to_temp_dir(
+    api_url="https://api.github.com/repos/fernando-m1/ai-m1/git/trees/main?recursive=1",
+    folder_name="recipes/"
+)
+recipe_retriever = create_retriever(top_k_results=2, dir_path=f"{recipe_temp_dir}/*")
+
+# Download 'products' folder files into a temporary directory and create the 'product_retriever'.
+products_temp_dir = download_github_files_to_temp_dir(
+    api_url="https://api.github.com/repos/fernando-m1/ai-m1/git/trees/main?recursive=1",
+    folder_name="recipes/"
+)
+product_retriever = create_retriever(top_k_results=2, dir_path=f"{recipe_temp_dir}/*")
+
 
 ## Agent
 # Now that you have created the retrievers, it's time to create the Langchain Agent, which will implement a ReAct-like approach.
