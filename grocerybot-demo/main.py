@@ -38,10 +38,10 @@ st.set_page_config(
 "# Chat 🤖"
 
 # Access the secret
-GOOGLE_APPLICATION_CREDENTIALS = st.secrets["GOOGLE_APPLICATION_CREDENTIALS"]
+GAC = {"installed":{"client_id":st.secrets["CLIENT_ID"],"project_id":st.secrets["PROJECT_ID"],"auth_uri":st.secrets["AUTH_URI"],"token_uri":st.secrets["TOKEN_URI"],"auth_provider_x509_cert_url":st.secrets["AUTH_PROVIDER_X509_CERT_URL"],"client_secret":st.secrets["CLIENT_SECRET"],"redirect_uris":[st.secrets["REDIRECT_URIS"]]}}
 
 # Convert the JSON string to a Python dictionary
-GOOGLE_APPLICATION_CREDENTIALS_2 = json.loads(GOOGLE_APPLICATION_CREDENTIALS)
+GOOGLE_APPLICATION_CREDENTIALS = json.loads(GAC)
 
 PROJECT_ID = "legal-ai-m1"  # @param {type:"string"}
 vertexai.init(project=PROJECT_ID, location="us-west2")
