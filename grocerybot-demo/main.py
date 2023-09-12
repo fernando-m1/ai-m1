@@ -38,6 +38,9 @@ st.set_page_config(
 
 "# Chat 🤖"
 
+st.write("Service Account: ")
+st.write(client._credentials.service_account_email)
+
 def access_secret_version(project_id, secret_id, version_id):
     # Initialize the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
@@ -54,12 +57,10 @@ def access_secret_version(project_id, secret_id, version_id):
 # Replace these variables with your specific values
 project_id = "legal-ai-m1"
 secret_id = "Legal-AI_ServiceAccountJSON"
-version_id = "1"  # You can also use a specific version number
+version_id = "latest"  # You can also use a specific version number
 
 # Fetch the secret and store it in GOOGLE_APPLICATION_CREDENTIALS
 GOOGLE_APPLICATION_CREDENTIALS = access_secret_version(project_id, secret_id, version_id)
-
-st.write(client._credentials.service_account_email)
 
 # Now, GOOGLE_APPLICATION_CREDENTIALS contains the secret data.
 
