@@ -56,7 +56,7 @@ def chunks(_lst: List[Any], n: int) -> Iterator[List[Any]]:
         A list of the next n elements from lst.
     """
 
-    for i in range(0, len(lst), n):
+    for i in range(0, _len(lst), n):
         yield lst[i : i + n]
 
 
