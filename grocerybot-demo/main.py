@@ -38,7 +38,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-"# Chat 🤖"
+"# GroceryBot Chat 🤖"
 
 def download_secret_from_gcs(bucket_name, blob_name):
     storage_client = storage.Client()
