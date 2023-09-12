@@ -36,13 +36,7 @@ st.set_page_config(
 
 "# Chat 🤖"
 
-llm = VertexAI(
-    model_name="text-bison@001",
-    max_output_tokens=256,
-    temperature=0,
-    top_p=0.8,
-    top_k=40,
-)
+embedding = VertexAIEmbeddings()
 
 @st.cache_resource(ttl="1h")
 def chunks(lst: List[Any], n: int) -> Iterator[List[Any]]:
