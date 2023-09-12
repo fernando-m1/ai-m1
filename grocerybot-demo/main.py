@@ -63,13 +63,16 @@ with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as fp:
 # Debugging: Read the file back and print the first 100 characters (be careful with sensitive info)
 with open(temp_filename, 'r') as fp:
     content = fp.read()
+    st.write("DEBUG: First 100 characters of the file:", content[:100])
     print("DEBUG: First 100 characters of the file:", content[:100])
 
 # Debugging: Try to load the JSON to see if it's well-formed
 try:
     json_content = json.loads(content)
+    st.write("DEBUG: JSON keys:", json_content.keys())
     print("DEBUG: JSON keys:", json_content.keys())
 except json.JSONDecodeError as e:
+    st.write("DEBUG: JSON decoding failed:", e)
     print("DEBUG: JSON decoding failed:", e)
 
 ###
