@@ -37,13 +37,32 @@ st.set_page_config(
 
 "# Chat 🤖"
 
-# Access the secret
-GAC = {"installed":{"client_id":st.secrets["CLIENT_ID"],"project_id":st.secrets["PROJECT_ID"],"auth_uri":st.secrets["AUTH_URI"],"token_uri":st.secrets["TOKEN_URI"],"auth_provider_x509_cert_url":st.secrets["AUTH_PROVIDER_X509_CERT_URL"],"client_secret":st.secrets["CLIENT_SECRET"],"redirect_uris":[st.secrets["REDIRECT_URIS"]]}}
+from google.cloud import secretmanager
 
-# Convert the JSON string to a Python dictionary
-GOOGLE_APPLICATION_CREDENTIALS = json.loads(GAC)
+def access_secret_version(project_id, secret_id, version_id):
+    # Initialize the Secret Manager client.
+    client = secretmanager.SecretManagerServiceClient()
 
-PROJECT_ID = "legal-ai-m1"  # @param {type:"string"}
+    # Build the resource name of the secret version.
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+    
+    # Access the secret version.
+    response = client.access_secret_version(request={"name": name})
+
+    # Return the decoded payload.
+    return response.payload.data.decode("UTF-8")
+
+# Replace these variables with your specific values
+project_id = "547015049931"
+secret_id = "Legal-AI_ServiceAccountJSON"
+version_id = "latest"  # You can also use a specific version number
+
+# Fetch the secret and store it in GOOGLE_APPLICATION_CREDENTIALS
+GOOGLE_APPLICATION_CREDENTIALS = access_secret_version(project_id, secret_id, version_id)
+
+# Now, GOOGLE_APPLICATION_CREDENTIALS contains the secret data.
+
+PROJECT_ID = "547015049931"  # @param {type:"string"}
 vertexai.init(project=PROJECT_ID, location="us-west2")
 
 llm = VertexAI(
