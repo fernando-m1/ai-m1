@@ -52,7 +52,7 @@ def access_secret_version(project_id, secret_id, version_id):
     return response.payload.data.decode("UTF-8")
 
 # Replace these variables with your specific values
-project_id = "547015049931"
+project_id = "legal-ai-m1"
 secret_id = "Legal-AI_ServiceAccountJSON"
 version_id = "1"  # You can also use a specific version number
 
@@ -63,7 +63,7 @@ st.write(client._credentials.service_account_email)
 
 # Now, GOOGLE_APPLICATION_CREDENTIALS contains the secret data.
 
-PROJECT_ID = "547015049931"  # @param {type:"string"}
+PROJECT_ID = "legal-ai-m1"  # @param {type:"string"}
 vertexai.init(project=PROJECT_ID, location="us-west2")
 
 llm = VertexAI(
