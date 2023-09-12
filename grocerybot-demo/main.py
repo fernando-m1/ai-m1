@@ -3,6 +3,7 @@ import streamlit as st
 import glob
 import pprint
 from typing import Any, Iterator, List
+import os
 
 from langchain.agents import AgentType, initialize_agent
 from langchain.document_loaders import TextLoader
@@ -35,7 +36,10 @@ st.set_page_config(
 
 "# Chat 🤖"
 
+os.environ["GOOGLE_CLOUD_PROJECT"] = "legal-ai-m1"
+
 llm = VertexAI(
+    project="legal-ai-m1",
     model_name="text-bison@001",
     max_output_tokens=256,
     temperature=0,
