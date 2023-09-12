@@ -36,6 +36,7 @@ st.set_page_config(
 "# Chat 🤖"
 
 vertexai.init(project="legal-ai-m1", location="us-west2")
+st.write(vertexai.project)
 
 llm = VertexAI(
     model_name="text-bison@001",
