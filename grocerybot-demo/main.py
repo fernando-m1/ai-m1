@@ -36,7 +36,7 @@ st.set_page_config(
 "# Chat 🤖"
 
 PROJECT_ID = "legal-ai-m1"  # @param {type:"string"}
-vertexai.init(project=PROJECT_ID, location="us-central1")
+vertexai.init(project="legal-ai-m1", location="us-central1")
 
 llm = VertexAI(
     model_name="text-bison@001",
