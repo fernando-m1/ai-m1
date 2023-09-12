@@ -58,6 +58,22 @@ with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as fp:
     fp.write(secret_content.encode())
     temp_filename = fp.name
 
+# ... (your existing code to download the secret and write it to a temp file)
+
+# Debugging: Read the file back and print the first 100 characters (be careful with sensitive info)
+with open(temp_filename, 'r') as fp:
+    content = fp.read()
+    print("DEBUG: First 100 characters of the file:", content[:100])
+
+# Debugging: Try to load the JSON to see if it's well-formed
+try:
+    json_content = json.loads(content)
+    print("DEBUG: JSON keys:", json_content.keys())
+except json.JSONDecodeError as e:
+    print("DEBUG: JSON decoding failed:", e)
+
+###
+
 # Set the environment variable to use the temporary file as the service account JSON
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = temp_filename
 
