@@ -92,19 +92,22 @@ def create_retriever(top_k_results: int, dir_path: str) -> VectorStoreRetriever:
     docs = load_docs_from_directory(dir_path=dir_path)
     st.write(f"Loaded {len(docs)} documents.")
     print(f"Loaded {len(docs)} documents.")
-    
+
     doc_chunk = chunks(docs, BATCH_SIZE_EMBEDDINGS)
-    st.write(f"Created {len(list(doc_chunk))} chunks.")
-    print(f"Created {len(list(doc_chunk))} chunks.")
+    
+    # For debugging, convert generator to list, print its length, and convert it back to a generator
+    doc_chunk_list = list(doc_chunk)
+    st.write(f"Created {len(doc_chunk_list)} chunks.")
+    doc_chunk = (item for item in doc_chunk_list)
+    
     
     db = None
-    for index, chunk in tqdm(enumerate(doc_chunk)):
+    for index, chunk in enumerate(doc_chunk):  # Removed tqdm for Streamlit compatibility
         if index == 0:
             db = FAISS.from_documents(chunk, embedding)
         else:
             db.add_documents(chunk)
 
-    # Error handling here
     if db is None:
         raise ValueError("No documents found, unable to create retriever.")
 
@@ -196,7 +199,7 @@ def recipe_selector(path: str) -> str:
     """
     return "Great choice! I can explain what are the ingredients of the recipe, show you the cooking instructions or suggest you which products to buy from the catalog!"
 
-docs = load_docs_from_directory("./recipes/*")
+docs = load_docs_from_directory(f"{recipes_temp_dir}/*")
 recipes_detail = {doc.metadata["source"]: doc.page_content for doc in docs}
 
 
