@@ -109,6 +109,9 @@ def create_retriever(top_k_results: int, dir_path: str) -> VectorStoreRetriever:
         else:
             db.add_documents(chunk)
 
+    print("FAISS database:", db)
+    st.write("FAISS database:", db)
+
     if db is None:
         raise ValueError("No documents found, unable to create retriever.")
 
@@ -151,6 +154,8 @@ recipes_temp_dir = download_github_files_to_temp_dir(
     api_url="https://api.github.com/repos/fernando-m1/ai-m1/git/trees/main?recursive=1",
     folder_name="recipes/"
 )
+st.write("Files in recipes_temp_dir:", os.listdir(recipes_temp_dir))
+print("Files in recipes_temp_dir:", os.listdir(recipes_temp_dir))
 recipe_retriever = create_retriever(top_k_results=2, dir_path=f"{recipes_temp_dir}/*")
 
 # Download 'products' folder files into a temporary directory and create the 'product_retriever'.
@@ -158,6 +163,9 @@ products_temp_dir = download_github_files_to_temp_dir(
     api_url="https://api.github.com/repos/fernando-m1/ai-m1/git/trees/main?recursive=1",
     folder_name="products/"
 )
+
+st.write("Files in recipes_temp_dir:", os.listdir(products_temp_dir))
+print("Files in recipes_temp_dir:", os.listdir(products_temp_dir))
 product_retriever = create_retriever(top_k_results=2, dir_path=f"{products_temp_dir}/*")
 
 
@@ -201,6 +209,8 @@ def recipe_selector(path: str) -> str:
     return "Great choice! I can explain what are the ingredients of the recipe, show you the cooking instructions or suggest you which products to buy from the catalog!"
 
 docs = load_docs_from_directory(f"{recipes_temp_dir}/*")
+print("Sample documents:", docs[:3])
+st.write("Sample documents:", docs[:3])
 recipes_detail = {doc.metadata["source"]: doc.page_content for doc in docs}
 
 
