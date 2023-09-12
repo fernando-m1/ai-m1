@@ -147,14 +147,14 @@ recipes_temp_dir = download_github_files_to_temp_dir(
     api_url="https://api.github.com/repos/fernando-m1/ai-m1/git/trees/main?recursive=1",
     folder_name="recipes/"
 )
-recipe_retriever = create_retriever(top_k_results=2, dir_path=f"{recipe_temp_dir}/*")
+recipe_retriever = create_retriever(top_k_results=2, dir_path=f"{recipes_temp_dir}/*")
 
 # Download 'products' folder files into a temporary directory and create the 'product_retriever'.
 products_temp_dir = download_github_files_to_temp_dir(
     api_url="https://api.github.com/repos/fernando-m1/ai-m1/git/trees/main?recursive=1",
-    folder_name="recipes/"
+    folder_name="products/"
 )
-product_retriever = create_retriever(top_k_results=2, dir_path=f"{recipe_temp_dir}/*")
+product_retriever = create_retriever(top_k_results=2, dir_path=f"{products_temp_dir}/*")
 
 
 ## Agent
