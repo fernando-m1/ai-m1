@@ -95,14 +95,15 @@ def create_retriever(top_k_results: int, dir_path: str) -> VectorStoreRetriever:
 
     doc_chunk = chunks(docs, BATCH_SIZE_EMBEDDINGS)
     
-    # For debugging, convert generator to list, print its length, and convert it back to a generator
+    # For debugging, convert generator to list, print its length
     doc_chunk_list = list(doc_chunk)
     st.write(f"Created {len(doc_chunk_list)} chunks.")
+    
+    # Create a new generator from the list for the actual loop
     doc_chunk = (item for item in doc_chunk_list)
     
-    
     db = None
-    for index, chunk in enumerate(doc_chunk):  # Removed tqdm for Streamlit compatibility
+    for index, chunk in enumerate(doc_chunk):
         if index == 0:
             db = FAISS.from_documents(chunk, embedding)
         else:
