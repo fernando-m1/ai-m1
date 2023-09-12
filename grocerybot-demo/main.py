@@ -4,6 +4,7 @@ import glob
 import pprint
 from typing import Any, Iterator, List
 import os
+import json
 
 from langchain.agents import AgentType, initialize_agent
 from langchain.document_loaders import TextLoader
@@ -35,6 +36,12 @@ st.set_page_config(
 )
 
 "# Chat 🤖"
+
+# Access the secret
+GOOGLE_APPLICATION_CREDENTIALS = st.secrets["GOOGLE_APPLICATION_CREDENTIALS"]
+
+# Convert the JSON string to a Python dictionary
+GOOGLE_APPLICATION_CREDENTIALS_2 = json.loads(GOOGLE_APPLICATION_CREDENTIALS)
 
 embedding = VertexAIEmbeddings()
 
