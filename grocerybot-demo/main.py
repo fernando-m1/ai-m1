@@ -56,8 +56,8 @@ def chunks(_lst: List[Any], n: int) -> Iterator[List[Any]]:
         A list of the next n elements from lst.
     """
 
-    for i in range(0, _len(lst), n):
-        yield lst[i : i + n]
+    for i in range(0, len(_lst), n):
+        yield _lst[i : i + n]
 
 
 def load_docs_from_directory(dir_path: str) -> List[Document]:
