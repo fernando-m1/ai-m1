@@ -43,6 +43,17 @@ GOOGLE_APPLICATION_CREDENTIALS = st.secrets["GOOGLE_APPLICATION_CREDENTIALS"]
 # Convert the JSON string to a Python dictionary
 GOOGLE_APPLICATION_CREDENTIALS_2 = json.loads(GOOGLE_APPLICATION_CREDENTIALS)
 
+PROJECT_ID = "legal-ai-m1"  # @param {type:"string"}
+vertexai.init(project=PROJECT_ID, location="us-west2")
+
+llm = VertexAI(
+    model_name="text-bison@001",
+    max_output_tokens=256,
+    temperature=0,
+    top_p=0.8,
+    top_k=40,
+)
+
 embedding = VertexAIEmbeddings()
 
 @st.cache_resource(ttl="1h")
