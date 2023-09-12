@@ -88,6 +88,7 @@ def create_retriever(top_k_results: int, dir_path: str) -> VectorStoreRetriever:
     BATCH_SIZE_EMBEDDINGS = 5
     docs = load_docs_from_directory(dir_path=dir_path)
     doc_chunk = chunks(docs, BATCH_SIZE_EMBEDDINGS)
+    db = None
     for index, chunk in tqdm(enumerate(doc_chunk)):
         if index == 0:
             db = FAISS.from_documents(chunk, embedding)
