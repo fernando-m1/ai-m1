@@ -17,6 +17,7 @@ from langchain.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStoreRetriever
 from tqdm import tqdm
 import vertexai
+from google.cloud import secretmanager
 
 from langchain.callbacks import StreamlitCallbackHandler
 from langchain.agents import OpenAIFunctionsAgent, AgentExecutor
@@ -36,8 +37,6 @@ st.set_page_config(
 )
 
 "# Chat 🤖"
-
-from google.cloud import secretmanager
 
 def access_secret_version(project_id, secret_id, version_id):
     # Initialize the Secret Manager client.
@@ -59,6 +58,8 @@ version_id = "1"  # You can also use a specific version number
 
 # Fetch the secret and store it in GOOGLE_APPLICATION_CREDENTIALS
 GOOGLE_APPLICATION_CREDENTIALS = access_secret_version(project_id, secret_id, version_id)
+
+st.write(client._credentials.service_account_email)
 
 # Now, GOOGLE_APPLICATION_CREDENTIALS contains the secret data.
 
