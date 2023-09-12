@@ -107,15 +107,108 @@ def create_retriever(top_k_results: int, dir_path: str) -> VectorStoreRetriever:
 recipe_retriever = create_retriever(top_k_results=2, dir_path="./recipes/*")
 product_retriever = create_retriever(top_k_results=5, dir_path="./products/*")
 
+## Agent
+# Now that you have created the retrievers, it's time to create the Langchain Agent, which will implement a ReAct-like approach.
+# An Agent has access to a suite of tools, which you can think of as Python functions that can potentially do anything you equip it with. What makes the Agent setup unique is its ability to **autonomously** decide which tool to call and in which order, based on the user input.
+
+@tool(return_direct=True)
+def retrieve_recipes(query: str) -> str:
+    """
+    Searches the recipe catalog to find recipes for the query.
+    Return the output without processing further.
+    """
+    docs = recipe_retriever.get_relevant_documents(query)
+
+    return (
+        f"Select the recipe you would like to explore further about {query}: [START CALLBACK FRONTEND] "
+        + str([doc.metadata for doc in docs])
+        + " [END CALLBACK FRONTEND]"
+    )
+
+@tool(return_direct=True)
+def retrieve_products(query: str) -> str:
+    """Searches the product catalog to find products for the query.
+    Use it when the user asks for the products available for a specific item. For example `Can you show me which onions I can buy?`
+    """
+    docs = product_retriever.get_relevant_documents(query)
+    return (
+        f"I found these products about {query}:  [START CALLBACK FRONTEND] "
+        + str([doc.metadata for doc in docs])
+        + " [END CALLBACK FRONTEND]"
+    )
+
+@tool
+def recipe_selector(path: str) -> str:
+    """
+    Use this when the user selects a recipe.
+    You will need to respond to the user telling what are the options once a recipe is selected.
+    You can explain what are the ingredients of the recipe, show you the cooking instructions or suggest you which products to buy from the catalog!
+    """
+    return "Great choice! I can explain what are the ingredients of the recipe, show you the cooking instructions or suggest you which products to buy from the catalog!"
+
+docs = load_docs_from_directory("./recipes/*")
+recipes_detail = {doc.metadata["source"]: doc.page_content for doc in docs}
+
+
+@tool
+def get_recipe_detail(path: str) -> str:
+    """
+    Use it to find more information for a specific recipe, such as the ingredients or the cooking steps.
+    Use this to find what are the ingredients for a recipe or the cooking steps.
+
+    Example output:
+    Ingredients:
+
+    * 1 pound lasagna noodles
+    * 1 pound ground beef
+    * 1/2 cup chopped onion
+    * 2 cloves garlic, minced
+    * 2 (28 ounce) cans crushed tomatoes
+    * 1 (15 ounce) can tomato sauce
+    * 1 teaspoon dried oregano
+
+    Would you like me to show you the suggested products from the catalogue?
+    """
+    try:
+        return recipes_detail[path]
+    except KeyError:
+        return "Could not find the details for this recipe"
+
+@tool(return_direct=True)
+def get_suggested_products_for_recipe(recipe_path: str) -> str:
+    """Use this only if the user would like to buy certain products connected to a specific recipe example 'Can you give me the products I can buy for the lasagne?'",
+
+    Args:
+        recipe_path: The recipe path.
+
+    Returns:
+        A list of products the user might want to buy.
+    """
+    recipe_to_product_mapping = {
+        "./recipes/lasagne.txt": [
+            "./products/angus_beef_lean_mince.txt",
+            "./products/large_onions.txt",
+            "./products/classic_carrots.txt",
+            "./products/classic_tomatoes.txt",
+        ]
+    }
+
+    return (
+        "These are some suggested ingredients for your recipe [START CALLBACK FRONTEND] "
+        + str(recipe_to_product_mapping[recipe_path])
+        + " [END CALLBACK FRONTEND]"
+    )
 
 
 
-tool = create_retriever_tool(
-    configure_retriever(),
-    "search_moradauno_info",
-    "Searches and returns documents regarding Morada Uno. Morada Uno is a Mexican technology startup, which has the mission of empowering real estate professionals to close faster and safer transactions. You do not know anything about Morada Uno, so if you are ever asked about Morada Uno you should use this tool.",
-)
-tools = [tool]
+
+tools = [
+    retrieve_recipes,
+    retrieve_products,
+    get_recipe_detail,
+    get_suggested_products_for_recipe,
+    recipe_selector,
+]
 llm = ChatOpenAI(temperature=0, streaming=True, model="gpt-4")
 message = SystemMessage(
     content=(
@@ -139,6 +232,10 @@ memory = AgentTokenBufferMemory(llm=llm)
 starter_message = "¡Pregúntame sobre Morada Uno! Estoy para resolver tus dudas sobre nuestros servicios."
 if "messages" not in st.session_state or st.sidebar.button("Clear message history"):
     st.session_state["messages"] = [AIMessage(content=starter_message)]
+
+
+
+
 
 
 for msg in st.session_state.messages:
