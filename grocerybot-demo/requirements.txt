@@ -8,3 +8,4 @@ faiss-cpu
 google-cloud-storage
 unstructured
 google-cloud-aiplatform
+google-cloud-secret-manager
