@@ -38,6 +38,8 @@ st.set_page_config(
 
 "# Chat 🤖"
 
+# Initialize the Secret Manager client
+client = secretmanager.SecretManagerServiceClient()
 st.write("Service Account: ")
 st.write(client._credentials.service_account_email)
 
