@@ -16,7 +16,6 @@ from langchain.tools import tool
 from langchain.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStoreRetriever
 from tqdm import tqdm
-import vertexai
 
 from langchain.callbacks import StreamlitCallbackHandler
 from langchain.agents import OpenAIFunctionsAgent, AgentExecutor
