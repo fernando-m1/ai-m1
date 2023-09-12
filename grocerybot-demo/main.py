@@ -16,10 +16,8 @@ from langchain.schema import Document
 from langchain.tools import tool
 from langchain.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStoreRetriever
+from langchain.embeddings import OpenAIEmbeddings
 from tqdm import tqdm
-import vertexai
-from google.cloud import secretmanager
-from google.cloud import storage
 
 from langchain.callbacks import StreamlitCallbackHandler
 from langchain.agents import OpenAIFunctionsAgent, AgentExecutor
@@ -40,60 +38,8 @@ st.set_page_config(
 
 "# GroceryBot Chat 🤖"
 
-def download_secret_from_gcs(bucket_name, blob_name):
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(blob_name)
-    return blob.download_as_text()
-
-# Replace these with your bucket and blob names
-bucket_name = "legal-ai-m1"
-blob_name = "credentials.json"
-
-# Download the secret
-secret_content = download_secret_from_gcs(bucket_name, blob_name)
-
-# Create a temporary file to store the service account JSON
-with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as fp:
-    fp.write(secret_content.encode())
-    temp_filename = fp.name
-
-# ... (your existing code to download the secret and write it to a temp file)
-
-# Debugging: Read the file back and print the first 100 characters (be careful with sensitive info)
-with open(temp_filename, 'r') as fp:
-    content = fp.read()
-    st.write("DEBUG: First 100 characters of the file:", content[:100])
-    print("DEBUG: First 100 characters of the file:", content[:100])
-
-# Debugging: Try to load the JSON to see if it's well-formed
-try:
-    json_content = json.loads(content)
-    st.write("DEBUG: JSON keys:", json_content.keys())
-    print("DEBUG: JSON keys:", json_content.keys())
-except json.JSONDecodeError as e:
-    st.write("DEBUG: JSON decoding failed:", e)
-    print("DEBUG: JSON decoding failed:", e)
-
-###
-
-# Set the environment variable to use the temporary file as the service account JSON
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = temp_filename
-
-# Now you can initialize your Google Cloud client libraries and they will use the service account specified
-
-PROJECT_ID = "legal-ai-m1"  # @param {type:"string"}
-vertexai.init(project=PROJECT_ID, location="us-west2")
-
-llm = VertexAI(
-    model_name="text-bison@001",
-    max_output_tokens=256,
-    temperature=0,
-    top_p=0.8,
-    top_k=40,
-)
-
-embedding = VertexAIEmbeddings()
+llm = ChatOpenAI(temperature=0, streaming=True, model_name="gpt-4")
+embedding = OpenAIEmbeddings()
 
 @st.cache_resource(ttl="1h")
 def chunks(lst: List[Any], n: int) -> Iterator[List[Any]]:
@@ -256,7 +202,7 @@ tools = [
     get_suggested_products_for_recipe,
     recipe_selector,
 ]
-llm = ChatOpenAI(temperature=0, streaming=True, model="gpt-4")
+
 message = SystemMessage(
     content=(
         "You are a helpful chatbot who is tasked with answering questions about Morada Uno. "
