@@ -5,6 +5,7 @@ import pprint
 from typing import Any, Iterator, List
 import os
 import json
+import tempfile
 
 from langchain.agents import AgentType, initialize_agent
 from langchain.document_loaders import TextLoader
@@ -18,6 +19,7 @@ from langchain.vectorstores.base import VectorStoreRetriever
 from tqdm import tqdm
 import vertexai
 from google.cloud import secretmanager
+from google.cloud import storage
 
 from langchain.callbacks import StreamlitCallbackHandler
 from langchain.agents import OpenAIFunctionsAgent, AgentExecutor
@@ -38,33 +40,28 @@ st.set_page_config(
 
 "# Chat 🤖"
 
-# Initialize the Secret Manager client
-client = secretmanager.SecretManagerServiceClient()
-st.write("Service Account: ")
-st.write(client._credentials.service_account_email)
+def download_secret_from_gcs(bucket_name, blob_name):
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+    return blob.download_as_text()
 
-def access_secret_version(project_id, secret_id, version_id):
-    # Initialize the Secret Manager client.
-    client = secretmanager.SecretManagerServiceClient()
+# Replace these with your bucket and blob names
+bucket_name = "legal-ai-m1"
+blob_name = "credentials.json"
 
-    # Build the resource name of the secret version.
-    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
-    
-    # Access the secret version.
-    response = client.access_secret_version(request={"name": name})
+# Download the secret
+secret_content = download_secret_from_gcs(bucket_name, blob_name)
 
-    # Return the decoded payload.
-    return response.payload.data.decode("UTF-8")
+# Create a temporary file to store the service account JSON
+with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as fp:
+    fp.write(secret_content.encode())
+    temp_filename = fp.name
 
-# Replace these variables with your specific values
-project_id = "legal-ai-m1"
-secret_id = "Legal-AI_ServiceAccountJSON"
-version_id = "latest"  # You can also use a specific version number
+# Set the environment variable to use the temporary file as the service account JSON
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = temp_filename
 
-# Fetch the secret and store it in GOOGLE_APPLICATION_CREDENTIALS
-GOOGLE_APPLICATION_CREDENTIALS = access_secret_version(project_id, secret_id, version_id)
-
-# Now, GOOGLE_APPLICATION_CREDENTIALS contains the secret data.
+# Now you can initialize your Google Cloud client libraries and they will use the service account specified
 
 PROJECT_ID = "legal-ai-m1"  # @param {type:"string"}
 vertexai.init(project=PROJECT_ID, location="us-west2")
