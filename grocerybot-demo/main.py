@@ -87,13 +87,23 @@ def create_retriever(top_k_results: int, dir_path: str) -> VectorStoreRetriever:
 
     BATCH_SIZE_EMBEDDINGS = 5
     docs = load_docs_from_directory(dir_path=dir_path)
+    st.write(f"Loaded {len(docs)} documents.")
+    print(f"Loaded {len(docs)} documents.")
+    
     doc_chunk = chunks(docs, BATCH_SIZE_EMBEDDINGS)
+    st.write(f"Created {len(list(doc_chunk))} chunks.")
+    print(f"Created {len(list(doc_chunk))} chunks.")
+    
     db = None
     for index, chunk in tqdm(enumerate(doc_chunk)):
         if index == 0:
             db = FAISS.from_documents(chunk, embedding)
         else:
             db.add_documents(chunk)
+
+    # Error handling here
+    if db is None:
+        raise ValueError("No documents found, unable to create retriever.")
 
     retriever = db.as_retriever(search_kwargs={"k": top_k_results})
     return retriever
