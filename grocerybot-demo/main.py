@@ -45,7 +45,7 @@ llm = ChatOpenAI(temperature=0, streaming=True, model_name="gpt-4")
 embedding = OpenAIEmbeddings()
 
 @st.cache_resource(ttl="1h")
-def chunks(lst: List[Any], n: int) -> Iterator[List[Any]]:
+def chunks(_lst: List[Any], n: int) -> Iterator[List[Any]]:
     """Yield successive n-sized chunks from lst.
 
     Args:
