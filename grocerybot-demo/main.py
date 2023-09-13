@@ -36,7 +36,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.schema import SystemMessage, AIMessage, HumanMessage
 from langchain.prompts import MessagesPlaceholder
 
-import(‘pysqlite3’)
+import pysqlite3
 import sys
 sys.modules[‘sqlite3’] = sys.modules.pop(‘pysqlite3’)
 import sqlite3
