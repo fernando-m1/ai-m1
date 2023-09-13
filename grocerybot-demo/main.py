@@ -50,7 +50,14 @@ embedding = OpenAIEmbeddings()
 
 loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="recipes")
 
-data = loader.load()
-len(data)
-st.write(data[0])
+documents = loader.load()
+st.write(f"Created {len(documents)} documents")
+st.write(f"Document 1: {documents[0]}")
+
+text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+texts = text_splitter.split_documents(documents)
+st.write(f"Text 1: {texts[0]}")
+
+embeddings = OpenAIEmbeddings()
+docsearch = Chroma.from_documents(texts, embeddings)
 
