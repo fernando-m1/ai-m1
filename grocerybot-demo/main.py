@@ -93,12 +93,16 @@ def create_retriever_from_texts(texts: List[Any], top_k_results: int) -> VectorS
 
 # Load recipes files and create a retriever of recipes.
 recipes_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="recipes")
-recipe_texts = load_texts_from_loader(recipes_loader)
-recipes_retriever = create_retriever_from_texts(recipe_texts, 2)
+recipes_texts = load_texts_from_loader(recipes_loader)
+st.write(f"Recipes number of documents: {len(recipes_texts)}")
+st.write(f"Recipes texts: {recipes_texts}")
+recipes_retriever = create_retriever_from_texts(recipes_texts, 2)
 st.write(f"Recipes retriever: {recipes_retriever}")
 
 # Load products files and create a retriever of products.
 products_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="products")
 products_texts = load_texts_from_loader(products_loader)
+st.write(f"Products number of documents: {len(products_texts)}")
+st.write(f"Products texts: {products_texts}")
 products_retriever = create_retriever_from_texts(products_texts, 5)
 st.write(f"Products retriever: {products_retriever}")
