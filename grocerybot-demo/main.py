@@ -21,6 +21,7 @@ from langchain.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStoreRetriever
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema import Document
+from langchain.document_loaders import GitLoader
 from tqdm import tqdm
 
 from langchain.callbacks import StreamlitCallbackHandler
@@ -46,6 +47,18 @@ llm = ChatOpenAI(temperature=0, streaming=True, model_name="gpt-4")
 embedding = OpenAIEmbeddings()
 
 @st.cache_resource(ttl="1h")
+
+loader = GitLoader(
+    clone_url="github.com/fernando-m1/ai-m1",
+    repo_path="./grocerybot-demo/recipes/",
+    branch="master",
+)
+
+data = loader.load()
+len(data)
+st.write(data[0])
+
+"""
 def chunks(_lst: List[Any], n: int) -> Iterator[List[Any]]:
     """Yield successive n-sized chunks from lst.
 
@@ -321,3 +334,4 @@ if prompt := st.chat_input(placeholder=starter_message):
         memory.save_context({"input": prompt}, response)
         st.session_state["messages"] = memory.buffer
         run_id = response["__run"].run_id
+"""
