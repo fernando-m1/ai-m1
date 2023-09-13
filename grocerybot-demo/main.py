@@ -89,6 +89,22 @@ def create_retriever_from_texts(texts: List[Any], top_k_results: int) -> VectorS
     retriever = docsearch.as_retriever(search_kwargs={"k": top_k_results})
     
     return retriever
+
+def load_docs_from_directory(dir_path: str) -> List[Document]:
+    """Loads a series of docs from a directory.
+
+    Args:
+      dir_path: The path to the directory containing the docs.
+
+    Returns:
+      A list of the docs in the directory.
+    """
+
+    docs = []
+    for file_path in glob.glob(dir_path):
+        loader = TextLoader(file_path)
+        docs = docs + loader.load()
+    return docs
     
 ####
 
