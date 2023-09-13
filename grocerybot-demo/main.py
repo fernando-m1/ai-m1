@@ -95,8 +95,8 @@ def create_retriever(top_k_results: int, dir_path: str):
     print(f"Loaded {len(docs)} documents.")
     
     doc_chunk = chunks(docs, BATCH_SIZE_EMBEDDINGS)
-    st.write(f"Created {len(doc_chunk_list)} chunks.")
-    st.write(f"Created {doc_chunk_list[0]} chunks.")
+    st.write(f"Created {len(doc_chunk)} chunks.")
+    st.write(f"Created {doc_chunk[0]} chunks.")
     
         
     db = None
