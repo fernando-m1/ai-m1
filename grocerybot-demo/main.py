@@ -38,9 +38,10 @@ from langchain.prompts import MessagesPlaceholder
 
 
 __import__('pysqlite3')
+import pysqlite3
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-import pysqlite3
+
 
 st.set_page_config(
     page_title="Morada Uno",
