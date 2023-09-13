@@ -49,9 +49,9 @@ embedding = OpenAIEmbeddings()
 # @st.cache_resource(ttl="1h")
 
 loader = GitLoader(
-    clone_url="github.com/fernando-m1/ai-m1",
+    clone_url="https://github.com/fernando-m1/ai-m1.git",
     repo_path="./grocerybot-demo/recipes/",
-    branch="master",
+    branch="main",
 )
 
 data = loader.load()
