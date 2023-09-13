@@ -96,6 +96,7 @@ def create_retriever(top_k_results: int, dir_path: str):
     
     doc_chunk = chunks(docs, BATCH_SIZE_EMBEDDINGS)
     st.write(f"Created {len(doc_chunk_list)} chunks.")
+    st.write(f"Created {doc_chunk_list[0]} chunks.")
     
         
     db = None
@@ -160,8 +161,8 @@ products_temp_dir = download_github_files_to_temp_dir(
     folder_name="products/"
 )
 
-st.write("Files in recipes_temp_dir:", os.listdir(products_temp_dir))
-print("Files in recipes_temp_dir:", os.listdir(products_temp_dir))
+st.write("Files in products_temp_dir:", os.listdir(products_temp_dir))
+print("Files in products_temp_dir:", os.listdir(products_temp_dir))
 product_retriever = create_retriever(top_k_results=2, dir_path=f"{products_temp_dir}/*")
 
 
