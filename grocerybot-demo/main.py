@@ -63,7 +63,7 @@ def load_texts_from_loader(loader: Any) -> List[Any]:
     documents = loader.load()
     
     # Split documents into texts
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+    text_splitter = CharacterTextSplitter(chunk_size=1500, chunk_overlap=0)
     texts = text_splitter.split_documents(documents)
     
     return texts
@@ -95,7 +95,7 @@ def create_retriever_from_texts(texts: List[Any], top_k_results: int) -> VectorS
 recipes_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="recipes")
 recipes_texts = load_texts_from_loader(recipes_loader)
 st.write(f"Recipes number of documents: {len(recipes_texts)}")
-st.write(f"Recipes texts: {recipes_texts}")
+st.write(f"Recipes texts: {recipes_texts[0]['page_content']}")
 recipes_retriever = create_retriever_from_texts(recipes_texts, 2)
 st.write(f"Recipes retriever: {recipes_retriever}")
 
@@ -103,6 +103,6 @@ st.write(f"Recipes retriever: {recipes_retriever}")
 products_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="products")
 products_texts = load_texts_from_loader(products_loader)
 st.write(f"Products number of documents: {len(products_texts)}")
-st.write(f"Products texts: {products_texts}")
+st.write(f"Products texts: {products_texts[0]['page_content']}")
 products_retriever = create_retriever_from_texts(products_texts, 5)
 st.write(f"Products retriever: {products_retriever}")
