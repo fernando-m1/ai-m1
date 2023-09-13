@@ -48,7 +48,7 @@ embedding = OpenAIEmbeddings()
 
 # @st.cache_resource(ttl="1h")
 
-loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="recipes"))
+loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="recipes")
 
 data = loader.load()
 len(data)
