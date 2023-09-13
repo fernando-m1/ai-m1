@@ -21,7 +21,7 @@ from langchain.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStoreRetriever
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema import Document
-from langchain.document_loaders import GitLoader
+from langchain.document_loaders import GCSDirectoryLoader
 from tqdm import tqdm
 
 from langchain.callbacks import StreamlitCallbackHandler
@@ -48,10 +48,7 @@ embedding = OpenAIEmbeddings()
 
 # @st.cache_resource(ttl="1h")
 
-loader = GitLoader(
-    repo_path="https://github.com/fernando-m1/ai-m1/tree/4502a3048de4368a112711042221be39e9159fdf/grocerybot-demo/recipes",
-    branch="main",
-)
+loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus")
 
 data = loader.load()
 len(data)
