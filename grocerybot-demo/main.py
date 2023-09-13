@@ -46,7 +46,7 @@ st.set_page_config(
 llm = ChatOpenAI(temperature=0, streaming=True, model_name="gpt-4")
 embedding = OpenAIEmbeddings()
 
-@st.cache_resource(ttl="1h")
+# @st.cache_resource(ttl="1h")
 
 loader = GitLoader(
     clone_url="github.com/fernando-m1/ai-m1",
