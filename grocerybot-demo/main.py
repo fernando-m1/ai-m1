@@ -20,6 +20,7 @@ from langchain.tools import tool
 from langchain.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStoreRetriever
 from langchain.embeddings import OpenAIEmbeddings
+from langchain.schema import Document
 from tqdm import tqdm
 
 from langchain.callbacks import StreamlitCallbackHandler
@@ -76,8 +77,8 @@ def load_docs_from_directory(dir_path: str) -> List[Document]:
         docs = docs + loader.load()
     return docs
 
-
-def create_retriever(top_k_results: int, dir_path: str) -> VectorStoreRetriever:
+###
+def create_retriever(top_k_results: int, dir_path: str):
     """Create a recipe retriever from a list of top results and a list of web pages.
 
     Args:
@@ -92,31 +93,26 @@ def create_retriever(top_k_results: int, dir_path: str) -> VectorStoreRetriever:
     docs = load_docs_from_directory(dir_path=dir_path)
     st.write(f"Loaded {len(docs)} documents.")
     print(f"Loaded {len(docs)} documents.")
-
-    doc_chunk = chunks(docs, BATCH_SIZE_EMBEDDINGS)
     
-    # For debugging, convert generator to list, print its length
-    doc_chunk_list = list(doc_chunk)
+    doc_chunk = chunks(docs, BATCH_SIZE_EMBEDDINGS)
     st.write(f"Created {len(doc_chunk_list)} chunks.")
     
-    # Create a new generator from the list for the actual loop
-    doc_chunk = (item for item in doc_chunk_list)
-    
+        
     db = None
     for index, chunk in enumerate(doc_chunk):
+        documents = [Document(page_content=doc) for doc in chunk]
         if index == 0:
-            db = FAISS.from_documents(chunk, embedding)
+            db = FAISS.from_documents(documents, OpenAIEmbeddings())
         else:
-            db.add_documents(chunk)
-
-    print("FAISS database:", db)
-    st.write("FAISS database:", db)
+            db.add_documents(documents)
 
     if db is None:
         raise ValueError("No documents found, unable to create retriever.")
 
     retriever = db.as_retriever(search_kwargs={"k": top_k_results})
     return retriever
+###
+
 
 ###
 def download_github_files_to_temp_dir(api_url: str, folder_name: str) -> str:
