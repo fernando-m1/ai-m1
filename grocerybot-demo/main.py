@@ -50,16 +50,56 @@ embedding = OpenAIEmbeddings()
 
 # @st.cache_resource(ttl="1h")
 
-loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="recipes")
+def load_texts_from_loader(loader: Any) -> List[Any]:
+    """
+    Load documents using the provided loader and split them into texts.
+    
+    Args:
+        loader: The loader object to load documents from.
+        
+    Returns:
+        List of texts obtained by splitting the documents.
+    """
+    # Load documents
+    documents = loader.load()
+    
+    # Split documents into texts
+    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+    texts = text_splitter.split_documents(documents)
+    
+    return texts
 
-documents = loader.load()
-st.write(f"Created {len(documents)} documents")
-st.write(f"Document 1: {documents[0]}")
+def create_retriever_from_texts(texts: List[Any], top_k_results: int) -> VectorStoreRetriever:
+    """
+    Create a retriever using the provided texts and top_k_results.
+    
+    Args:
+        texts: List of texts to create embeddings from.
+        top_k_results: Number of top results to retrieve.
+        
+    Returns:
+        A retriever object.
+    """
+    # Create embeddings
+    embeddings = OpenAIEmbeddings()
+    
+    # Create Chroma (or your specific VectorStore)
+    docsearch = Chroma.from_documents(texts, embeddings)
+    
+    # Create a retriever with top k results
+    retriever = docsearch.as_retriever(search_kwargs={"k": top_k_results})
+    
+    return retriever
+####
 
-text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-texts = text_splitter.split_documents(documents)
-st.write(f"Text 1: {texts[0]}")
+# Load recipes files and create a retriever of recipes.
+recipes_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="recipes")
+recipe_texts = load_texts_from_loader(recipes_loader)
+recipes_retriever = create_retriever_from_texts(recipe_texts, 2)
+st.write(f"Recipes retriever: {recipes_retriever}")
 
-embeddings = OpenAIEmbeddings()
-docsearch = Chroma.from_documents(texts, embeddings)
-
+# Load products files and create a retriever of products.
+products_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="products")
+products_texts = load_texts_from_loader(products_loader)
+products_retriever = create_retriever_from_texts(products_texts, 5)
+st.write(f"Products retriever: {products_retriever}")
