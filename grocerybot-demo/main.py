@@ -165,10 +165,10 @@ def recipe_selector(path: str) -> str:
     """
     return "Great choice! I can explain what are the ingredients of the recipe, show you the cooking instructions or suggest you which products to buy from the catalog!"
 
-docs = load_docs_from_directory(f"{recipes_temp_dir}/*")
-print("Sample documents:", docs[:3])
-st.write("Sample documents:", docs[:3])
-recipes_detail = {doc.metadata["source"]: doc.page_content for doc in docs}
+# docs = load_docs_from_directory(f"{recipes_temp_dir}/*")
+# print("Sample documents:", docs[:3])
+# st.write("Sample documents:", docs[:3])
+# recipes_detail = {doc.metadata["source"]: doc.page_content for doc in docs}
 
 
 @tool
