@@ -22,6 +22,8 @@ from langchain.vectorstores.base import VectorStoreRetriever
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema import Document
 from langchain.document_loaders import GCSDirectoryLoader
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.vectorstores import Chroma
 from tqdm import tqdm
 
 from langchain.callbacks import StreamlitCallbackHandler
