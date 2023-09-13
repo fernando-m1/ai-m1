@@ -8,5 +8,3 @@ faiss-cpu
 google-cloud-storage
 unstructured
 chromadb
-pysqlite3-binary
-pysqlite3
