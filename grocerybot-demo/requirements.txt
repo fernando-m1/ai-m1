@@ -6,4 +6,5 @@ openai
 tiktoken
 faiss-cpu
 google-cloud-storage
-unstructuredchromadb
+unstructured
+chromadb
