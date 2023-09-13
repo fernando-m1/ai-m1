@@ -23,7 +23,6 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema import Document
 from langchain.document_loaders import GCSDirectoryLoader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import Chroma
 from tqdm import tqdm
 
 from langchain.callbacks import StreamlitCallbackHandler
@@ -89,8 +88,8 @@ def create_retriever_from_texts(texts: List[Any], top_k_results: int) -> VectorS
     # Create embeddings
     embeddings = OpenAIEmbeddings()
     
-    # Create Chroma (or your specific VectorStore)
-    docsearch = Chroma.from_documents(texts, embeddings)
+    # Create FAISS index (or your specific VectorStore)
+    docsearch = FAISS.from_documents(texts, embeddings)
     
     # Create a retriever with top k results
     retriever = docsearch.as_retriever(search_kwargs={"k": top_k_results})
