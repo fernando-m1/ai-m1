@@ -306,7 +306,10 @@ if prompt := st.chat_input(placeholder=starter_message) or st.session_state.get(
 
         # Make sure the output is a string before appending it to the messages
         if "output" in response:
-            st.session_state.messages.append(AIMessage(content=str(response["output"])))
+            output_content = response["output"]
+            if isinstance(output_content, list):
+                output_content = ', '.join(output_content)
+            st.session_state.messages.append(AIMessage(content=str(output_content)))
             
         memory.save_context({"input": prompt}, response)
         st.session_state["messages"] = memory.buffer
