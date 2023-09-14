@@ -75,7 +75,7 @@ def load_texts_from_loader(loader: Any) -> List[Any]:
             doc.metadata["name"] = name
     
     # Split documents into texts
-    text_splitter = CharacterTextSplitter(chunk_size=1800, chunk_overlap=0)
+    text_splitter = CharacterTextSplitter(chunk_size=2000, chunk_overlap=0)
     texts = text_splitter.split_documents(documents)
     
     return texts
