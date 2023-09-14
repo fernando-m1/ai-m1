@@ -123,21 +123,21 @@ def load_docs_from_directory(dir_path: str) -> List[Document]:
 # Load recipes files and create a retriever of recipes.
 recipes_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="recipes")
 recipes_texts = load_texts_from_loader(recipes_loader)
-st.write(f"Recipes number of documents: {len(recipes_texts)}")
-st.write(f"Recipes texts: {recipes_texts[0]}")
+#st.write(f"Recipes number of documents: {len(recipes_texts)}")
+#st.write(f"Recipes texts: {recipes_texts[0]}")
 recipe_retriever = create_retriever_from_texts(recipes_texts, 2)
-st.write(f"Recipes retriever: {recipe_retriever}")
+#st.write(f"Recipes retriever: {recipe_retriever}")
 
 recipes_detail = {recipe.metadata["source"]: recipe.page_content for recipe in recipes_texts}
-st.write(f"Recipes sources are: {recipes_detail}")
+#st.write(f"Recipes sources are: {recipes_detail}")
 
 # Load products files and create a retriever of products.
 products_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="products")
 products_texts = load_texts_from_loader(products_loader)
-st.write(f"Products number of documents: {len(products_texts)}")
-st.write(f"Products texts: {products_texts[0]}")
+#st.write(f"Products number of documents: {len(products_texts)}")
+#st.write(f"Products texts: {products_texts[0]}")
 product_retriever = create_retriever_from_texts(products_texts, 5)
-st.write(f"Products retriever: {product_retriever}")
+#st.write(f"Products retriever: {product_retriever}")
 
 ###
 
