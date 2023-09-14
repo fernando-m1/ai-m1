@@ -41,6 +41,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+# This will hold the selected recipe, if any.
+if "selected_recipe" not in st.session_state:
+    st.session_state["selected_recipe"] = None
+
 "# GroceryBot Chat 🤖"
 
 llm = ChatOpenAI(temperature=0, streaming=True, model_name="gpt-4")
@@ -141,13 +145,9 @@ def retrieve_recipes(query: str) -> str:
     docs = recipe_retriever.get_relevant_documents(query)
 
     # Extract the recipe names from the metadata and make them more user-friendly
-    recipe_names = [os.path.splitext(os.path.basename(doc.metadata["source"]))[0].replace('_', ' ').title() for doc in docs]
+    #recipe_names = [os.path.splitext(os.path.basename(doc.metadata["source"]))[0].replace('_', ' ').title() for doc in docs]
 
-    return (
-        f"Select the recipe you would like to explore further about {query}: "
-        + ', '.join(recipe_names)
-        + " ."
-    )
+    return [doc.metadata["source"] for doc in docs]
 
 @tool(return_direct=True)
 def retrieve_products(query: str) -> str:
@@ -280,6 +280,18 @@ if prompt := st.chat_input(placeholder=starter_message):
             callbacks=[st_callback],
             include_run_info=True,
         )
+
+        # Check if the agent returned a list of recipes
+        if isinstance(response["output"], list):
+            st.write("Select the recipe you would like to explore further:")
+            for recipe in response["output"]:
+                if st.button(recipe):
+                    st.session_state["selected_recipe"] = recipe
+                    st.write(f"You selected {recipe}")
+                    # Here you can send the selected recipe back to the chat or do something else
+        else:
+            st.write(response["output"])
+        
         st.session_state.messages.append(AIMessage(content=response["output"]))
         st.write(response["output"])
         memory.save_context({"input": prompt}, response)
