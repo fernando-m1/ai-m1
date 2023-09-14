@@ -75,7 +75,7 @@ def load_texts_from_loader(loader: Any) -> List[Any]:
             doc.metadata["name"] = name
     
     # Split documents into texts
-    text_splitter = CharacterTextSplitter(chunk_size=2000, chunk_overlap=0)
+    text_splitter = CharacterTextSplitter(chunk_size=3000, chunk_overlap=0)
     texts = text_splitter.split_documents(documents)
     
     return texts
@@ -265,11 +265,7 @@ starter_message = "¡Pregúntame sobre Morada Uno! Estoy para resolver tus dudas
 if "messages" not in st.session_state or st.sidebar.button("Clear message history"):
     st.session_state["messages"] = [AIMessage(content=starter_message)]
 
-
-
-
-
-
+# This code section displays the chat history and input box
 for msg in st.session_state.messages:
     if isinstance(msg, AIMessage):
         st.chat_message("assistant").write(msg.content)
@@ -277,7 +273,14 @@ for msg in st.session_state.messages:
         st.chat_message("user").write(msg.content)
     memory.chat_memory.add_message(msg)
 
+# This code section handles the button clicks for recipe selection
+if "recipe_to_path" in st.session_state:
+    for recipe_name in st.session_state["recipe_to_path"].keys():
+        if st.button(recipe_name):
+            st.session_state["selected_recipe"] = st.session_state["recipe_to_path"][recipe_name]
 
+
+# This code section handles the chat input
 if prompt := st.chat_input(placeholder=starter_message):
     st.chat_message("user").write(prompt)
     with st.chat_message("assistant"):
@@ -288,6 +291,7 @@ if prompt := st.chat_input(placeholder=starter_message):
             include_run_info=True,
         )
 
+        """
         # Check if the agent returned a list of recipes
         if isinstance(response["output"], list):
             st.write("Select the recipe you would like to explore further:")
@@ -302,6 +306,12 @@ if prompt := st.chat_input(placeholder=starter_message):
         
         st.session_state.messages.append(AIMessage(content=response["output"]))
         st.write(response["output"])
+        """
+        
+        # Make sure the output is a string before appending it to the messages
+        if "output" in response:
+            st.session_state.messages.append(AIMessage(content=str(response["output"])))
+            
         memory.save_context({"input": prompt}, response)
         st.session_state["messages"] = memory.buffer
         run_id = response["__run"].run_id
