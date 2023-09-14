@@ -9,7 +9,6 @@ import tempfile
 import requests
 import base64
 
-
 from langchain.agents import AgentType, initialize_agent
 from langchain.document_loaders import TextLoader
 from langchain.embeddings import VertexAIEmbeddings
@@ -141,10 +140,13 @@ def retrieve_recipes(query: str) -> str:
     """
     docs = recipe_retriever.get_relevant_documents(query)
 
+    # Extract the recipe names from the metadata and make them more user-friendly
+    recipe_names = [os.path.splitext(os.path.basename(doc.metadata["source"]))[0].replace('_', ' ').title() for doc in docs]
+
     return (
-        f"Select the recipe you would like to explore further about {query}: [START CALLBACK FRONTEND] "
-        + str([doc.metadata for doc in docs])
-        + " [END CALLBACK FRONTEND]"
+        f"Select the recipe you would like to explore further about {query}: "
+        + ', '.join(recipe_names)
+        + " ."
     )
 
 @tool(return_direct=True)
@@ -153,10 +155,14 @@ def retrieve_products(query: str) -> str:
     Use it when the user asks for the products available for a specific item. For example `Can you show me which onions I can buy?`
     """
     docs = product_retriever.get_relevant_documents(query)
+
+    # Extract the recipe names from the metadata and make them more user-friendly
+    product_names = [os.path.splitext(os.path.basename(doc.metadata["source"]))[0].replace('_', ' ').title() for doc in docs]
+    
     return (
-        f"I found these products about {query}:  [START CALLBACK FRONTEND] "
-        + str([doc.metadata for doc in docs])
-        + " [END CALLBACK FRONTEND]"
+        f"I found these products about {query}: "
+        + ', '.join(product_names)
+        + " ."
     )
 
 @tool
