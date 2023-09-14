@@ -281,7 +281,7 @@ agent_executor = AgentExecutor(
     agent=agent,
     tools=tools,
     verbose=False,
-    return_intermediate_steps=False,
+    return_intermediate_steps=True,
     agent_kwargs={"prefix": PREFIX},
 )
 memory = AgentTokenBufferMemory(llm=llm)
