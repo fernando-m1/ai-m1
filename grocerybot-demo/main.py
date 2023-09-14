@@ -225,11 +225,11 @@ def get_suggested_products_for_recipe(recipe_path: str) -> str:
         A list of products the user might want to buy.
     """
     recipe_to_product_mapping = {
-        "./recipes/lasagne.txt": [
-            "./products/angus_beef_lean_mince.txt",
-            "./products/large_onions.txt",
-            "./products/classic_carrots.txt",
-            "./products/classic_tomatoes.txt",
+        "gs://moradauno-corpus/recipes/lasagne.txt": [
+            "gs://moradauno-corpus/products/angus_beef_lean_mince.txt",
+            "gs://moradauno-corpus/products/large_onions.txt",
+            "gs://moradauno-corpus/products/classic_carrots.txt",
+            "gs://moradauno-corpus/products/classic_tomatoes.txt",
         ]
     }
 
@@ -285,7 +285,7 @@ agent_executor = AgentExecutor(
     agent_kwargs={"prefix": PREFIX},
 )
 memory = AgentTokenBufferMemory(llm=llm)
-starter_message = "¡Pregúntame sobre Morada Uno! Estoy para resolver tus dudas sobre nuestros servicios."
+starter_message = "Write a request for information regarding grocery shopping or cooking recipes."
 if "messages" not in st.session_state or st.sidebar.button("Clear message history"):
     st.session_state["messages"] = [AIMessage(content=starter_message)]
 
