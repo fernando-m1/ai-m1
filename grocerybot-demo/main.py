@@ -42,6 +42,9 @@ st.set_page_config(
 )
 
 # Initialize session_state variables
+
+starter_message = "Let me know if I can help you with cooking recommendations or grocery shopping today!"
+
 if "recipe_to_path" not in st.session_state:
     st.session_state["recipe_to_path"] = {}
 if "selected_recipe" not in st.session_state:
