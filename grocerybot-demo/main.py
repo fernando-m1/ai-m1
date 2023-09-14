@@ -41,9 +41,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# This will hold the selected recipe, if any.
+# Initialize session_state variables
 if "selected_recipe" not in st.session_state:
     st.session_state["selected_recipe"] = None
+if "recipe_to_path" not in st.session_state:
+    st.session_state["recipe_to_path"] = {}
 
 "# GroceryBot Chat 🤖"
 
@@ -64,6 +66,13 @@ def load_texts_from_loader(loader: Any) -> List[Any]:
     """
     # Load documents
     documents = loader.load()
+
+    # Add a "name" key to the metadata of each document
+    for doc in documents:
+        if "source" in doc.metadata:
+            # Extract the name from the source (assuming the source is a file path)
+            name = os.path.basename(doc.metadata["source"]).replace(".txt", "").replace("_", " ").title()
+            doc.metadata["name"] = name
     
     # Split documents into texts
     text_splitter = CharacterTextSplitter(chunk_size=1800, chunk_overlap=0)
@@ -137,18 +146,16 @@ st.write(f"Products retriever: {product_retriever}")
 # An Agent has access to a suite of tools, which you can think of as Python functions that can potentially do anything you equip it with. What makes the Agent setup unique is its ability to **autonomously** decide which tool to call and in which order, based on the user input.
 
 @tool(return_direct=True)
-def retrieve_recipes(query: str) -> str:
+def retrieve_recipes(query: str) -> List[str]:
     """
     Searches the recipe catalog to find recipes for the query.
     Return the output without processing further.
     """
     docs = recipe_retriever.get_relevant_documents(query)
-
-    # Extract the recipe names from the metadata and make them more user-friendly
-    #recipe_names = [os.path.splitext(os.path.basename(doc.metadata["source"]))[0].replace('_', ' ').title() for doc in docs]
-
-    return [doc.metadata["source"] for doc in docs]
-
+    recipe_to_path = {doc.metadata["name"]: doc.metadata["source"] for doc in docs}
+    st.session_state["recipe_to_path"] = recipe_to_path
+    return list(recipe_to_path.keys())
+    
 @tool(return_direct=True)
 def retrieve_products(query: str) -> str:
     """Searches the product catalog to find products for the query.
@@ -284,13 +291,14 @@ if prompt := st.chat_input(placeholder=starter_message):
         # Check if the agent returned a list of recipes
         if isinstance(response["output"], list):
             st.write("Select the recipe you would like to explore further:")
-            for recipe in response["output"]:
-                if st.button(recipe):
-                    st.session_state["selected_recipe"] = recipe
-                    st.write(f"You selected {recipe}")
-                    # Here you can send the selected recipe back to the chat or do something else
+            for recipe_name in response["output"]:
+                if st.button(recipe_name):
+                    st.session_state["selected_recipe"] = st.session_state["recipe_to_path"][recipe_name]
+                    # Continue the conversation here, e.g., send the selected recipe back to the chat
+        elif isinstance(response["output"], str):  # Make sure it's a string before appending
+            st.session_state.messages.append(AIMessage(content=response["output"]))
         else:
-            st.write(response["output"])
+            st.write("Unexpected output type")
         
         st.session_state.messages.append(AIMessage(content=response["output"]))
         st.write(response["output"])
