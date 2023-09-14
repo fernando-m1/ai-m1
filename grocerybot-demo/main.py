@@ -290,23 +290,6 @@ if prompt := st.chat_input(placeholder=starter_message):
             callbacks=[st_callback],
             include_run_info=True,
         )
-
-        """
-        # Check if the agent returned a list of recipes
-        if isinstance(response["output"], list):
-            st.write("Select the recipe you would like to explore further:")
-            for recipe_name in response["output"]:
-                if st.button(recipe_name):
-                    st.session_state["selected_recipe"] = st.session_state["recipe_to_path"][recipe_name]
-                    # Continue the conversation here, e.g., send the selected recipe back to the chat
-        elif isinstance(response["output"], str):  # Make sure it's a string before appending
-            st.session_state.messages.append(AIMessage(content=response["output"]))
-        else:
-            st.write("Unexpected output type")
-        
-        st.session_state.messages.append(AIMessage(content=response["output"]))
-        st.write(response["output"])
-        """
         
         # Make sure the output is a string before appending it to the messages
         if "output" in response:
