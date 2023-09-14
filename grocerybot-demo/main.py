@@ -42,10 +42,15 @@ st.set_page_config(
 )
 
 # Initialize session_state variables
-if "selected_recipe" not in st.session_state:
-    st.session_state["selected_recipe"] = None
 if "recipe_to_path" not in st.session_state:
     st.session_state["recipe_to_path"] = {}
+if "selected_recipe" not in st.session_state:
+    st.session_state["selected_recipe"] = None
+if "button_clicked" not in st.session_state:
+    st.session_state["button_clicked"] = False
+if "messages" not in st.session_state:
+    st.session_state["messages"] = [AIMessage(content=starter_message)]
+
 
 "# GroceryBot Chat 🤖"
 
@@ -278,10 +283,15 @@ if "recipe_to_path" in st.session_state:
     for recipe_name in st.session_state["recipe_to_path"].keys():
         if st.button(recipe_name):
             st.session_state["selected_recipe"] = st.session_state["recipe_to_path"][recipe_name]
+            st.session_state["button_clicked"] = True  # Set a flag to indicate a button was clicked
 
 
 # This code section handles the chat input
-if prompt := st.chat_input(placeholder=starter_message):
+if prompt := st.chat_input(placeholder=starter_message) or st.session_state.get("button_clicked", False):
+    if st.session_state.get("button_clicked", False):
+        prompt = st.session_state["selected_recipe"]  # Use the selected recipe as the prompt
+        st.session_state["button_clicked"] = False  # Reset the flag
+
     st.chat_message("user").write(prompt)
     with st.chat_message("assistant"):
         st_callback = StreamlitCallbackHandler(st.container())
@@ -290,7 +300,7 @@ if prompt := st.chat_input(placeholder=starter_message):
             callbacks=[st_callback],
             include_run_info=True,
         )
-        
+
         # Make sure the output is a string before appending it to the messages
         if "output" in response:
             st.session_state.messages.append(AIMessage(content=str(response["output"])))
