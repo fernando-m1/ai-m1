@@ -35,9 +35,9 @@ from langchain.schema import SystemMessage, AIMessage, HumanMessage
 from langchain.prompts import MessagesPlaceholder
 
 st.set_page_config(
-    page_title="Morada Uno",
+    page_title="GroceryBot",
     page_icon="🤖",
-    layout="wide",
+    layout="centered",
     initial_sidebar_state="collapsed",
 )
 
