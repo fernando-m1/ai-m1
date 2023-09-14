@@ -116,6 +116,9 @@ st.write(f"Recipes texts: {recipes_texts[0]}")
 recipe_retriever = create_retriever_from_texts(recipes_texts, 2)
 st.write(f"Recipes retriever: {recipe_retriever}")
 
+recipes_detail = {recipe.metadata["source"]: recipe.page_content for recipe in recipes_texts}
+st.write(f"Recipes sources are: {recipes_detail}")
+
 # Load products files and create a retriever of products.
 products_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", prefix="products")
 products_texts = load_texts_from_loader(products_loader)
