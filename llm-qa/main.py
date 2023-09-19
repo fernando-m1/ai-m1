@@ -94,67 +94,30 @@ def load_texts_from_loader(loader: Any) -> List[Any]:
     return texts
 
 # Define a function to create a retriever from texts
-def create_retriever_from_texts(texts: List[Any], top_k_results: int) -> VectorStoreRetriever:
-    """
-    Create a retriever using the provided texts and top_k_results.
-    
-    Args:
-        texts: List of texts to create embeddings from.
-        top_k_results: Number of top results to retrieve.
-        
-    Returns:
-        A retriever object.
-    """
-    # Create embeddings
-    embeddings = OpenAIEmbeddings()
-    
-    # Create FAISS index (or your specific VectorStore)
-    docsearch = FAISS.from_documents(texts, embeddings)
-    
-    # Create a retriever with top k results
-    retriever = docsearch.as_retriever(search_kwargs={"k": top_k_results})
-    
-    return retriever
-
-# Define a function to create a retriever from a URL
-def load_docs_from_directory(dir_path: str) -> List[Document]:
-    """Loads a series of docs from a directory.
-
-    Args:
-      dir_path: The path to the directory containing the docs.
-
-    Returns:
-      A list of the docs in the directory.
-    """
-
-    docs = []
-    for file_path in glob.glob(dir_path):
-        loader = TextLoader(file_path)
-        docs = docs + loader.load()
-    return docs
-
-
-def configure_main_retriever():
-    loader = GCSFileLoader(project_name="legal-ai-m1", bucket="moradauno-corpus", blob="moradauno_corpus-qa.txt")
-        
+def create_retriever(loader: Any, top_k_results: int) -> VectorStoreRetriever:
+    """Configures a retriever from a loader."""
     # Load documents from loader
     docs = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
+        separators=["#","##", "###", "\n\n","\n","."],
+        chunk_size=1500,
         chunk_overlap=200,
     )
     documents = text_splitter.split_documents(docs)
     embeddings = OpenAIEmbeddings()
     vectorstore = FAISS.from_documents(documents, embeddings)
-    retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
+    retriever = vectorstore.as_retriever(search_kwargs={"k": top_k_results})
     return retriever
 
 #####
 
 # Load products files and create a retriever of products.
+moradauno_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus-demo")
+product_retriever = create_retriever(moradauno_loader, 5)
+
+# Load products files and create a retriever of products.
 products_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus-demo", prefix="Productos/")
-products_texts = load_texts_from_loader(products_loader)
-product_retriever = create_retriever_from_texts(products_texts, 3)
+product_retriever = create_retriever(products_loader, 3)
 
 
 # Define the input and output structure using Pydantic
