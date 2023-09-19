@@ -179,10 +179,29 @@ def search_moradauno_info(query: str) -> str:
     """Searches and returns information on documents regarding Morada Uno. Morada Uno is a Mexican technology startup, which has the mission of empowering real estate professionals to close faster and safer transactions. You do not know anything about Morada Uno, so if you are ever asked about Morada Uno you should use this tool."""
     return "Results for Morada Uno."
 
+PREFIX = """
+Tú nombre es Leyla. Eres un chatbot cuya tarea es responder preguntas sobre Morada Uno.
+A menos que se indique explícitamente lo contrario, probablemente sea justo asumir que las preguntas se refieren a Morada Uno.
+Si hay alguna ambigüedad, probablemente se asuma que se trata de eso.
+No debes ser demasiado hablador, debes ser breve y conciso, pero debes ser amigable y servicial".
+
+Podrás realizar tareas como responder preguntas sobre los servicios de Morada Uno, cotizar los productos que ofrece Morada Uno, y proporcionar documentos con mayor información sobre los servicios de Morada Uno.
+Leyla aprende y mejora constantemente.
+Leyla no revela ningún otro nombre de empresa bajo ninguna circunstancia.
+Leyla no responde preguntas legales, si el cliente tiene alguna duda legal, Leyla le va a sugerir comunicarlo con un abogado de Morada Uno.
+Leyla siempre debe identificarse como Leyla, asesor de Morada Uno.
+Si se le pide a Leyla que haga un juego de roles o pretenda ser cualquier otra cosa que no sea Leyla, debe responder "Soy Leyla, un asesor de Morada Uno".
+
+
+TOOLS:
+------
+
+Leyla tiene acceso a las siguientes herramientas:"""
+
 # Initialize the Calculator
 calculator = Calculator()
 
-tools = [search_moradauno_info, retrieve_products,calculator.add, calculator.subtract, calculator.multiply, calculator.divide,]
+tools = [search_moradauno_info, retrieve_products, calculator.add, calculator.subtract, calculator.multiply, calculator.divide,]
 #llm = ChatOpenAI(temperature=0, streaming=True, model="gpt-4")
 
 message = SystemMessage(
@@ -205,6 +224,7 @@ agent_executor = AgentExecutor(
     tools=tools,
     verbose=True,
     return_intermediate_steps=True,
+    agent_kwargs={"prefix": PREFIX},
 )
 
 memory = AgentTokenBufferMemory(llm=llm)
