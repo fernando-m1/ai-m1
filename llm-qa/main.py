@@ -205,7 +205,7 @@ if "messages" not in st.session_state or st.sidebar.button("Clear message histor
 
 for msg in st.session_state.messages:
     if isinstance(msg, AIMessage):
-        st.chat_message("assistant").write(msg.content)
+        st.chat_message("assistant", avatar=img).write(msg.content)
     elif isinstance(msg, HumanMessage):
         st.chat_message("user").write(msg.content)
 
@@ -228,4 +228,4 @@ if prompt := st.chat_input(placeholder=starter_message):
     response_content = response_content.replace("$", "\$")
     
     st.session_state.messages.append(AIMessage(content=response_content))
-    st.chat_message("assistant").write(response_content)
+    st.chat_message("assistant", avatar=img).write(response_content)
