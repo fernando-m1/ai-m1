@@ -19,7 +19,11 @@ from langchain.agents.openai_functions_agent.agent_token_buffer_memory import Ag
 from typing import Any, Iterator, List
 
 # Streamlit page config
-st.set_page_config(page_title="MoradaUno Chatbot", page_icon="🤖") 
+st.set_page_config(page_title="MoradaUno Chatbot", page_icon="🤖")
+
+# Load the custom CSS
+with open("styles.css", "r") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # Define functions
 def text_splitter():
@@ -199,9 +203,11 @@ if "messages" not in st.session_state or st.sidebar.button("Clear message histor
 
 for msg in st.session_state.messages:
     if isinstance(msg, AIMessage):
-        st.chat_message("assistant").write(msg.content)
+        with st.container():
+            st.image("path_to_your_company_icon.png", width=40, format="PNG", use_container_width=False, output_format="auto", clamp=False, channels="RGB", caption="", start_time=None, end_time=None, key=None, use_column_width=False)
+            st.markdown(f"<div class='assistant-message'><div class='message-bubble'>{msg.content}</div></div>", unsafe_allow_html=True)
     elif isinstance(msg, HumanMessage):
-        st.chat_message("user").write(msg.content)
+        st.markdown(f"<div class='user-message'><div class='message-bubble'>{msg.content}</div></div>", unsafe_allow_html=True)
 
 if prompt := st.chat_input(placeholder=starter_message):
     st.chat_message("user").write(prompt)
