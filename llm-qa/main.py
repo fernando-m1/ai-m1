@@ -195,16 +195,29 @@ agent_executor = AgentExecutor(
 # Streamlit interface
 if "messages" not in st.session_state:
   st.session_state["messages"] = []
-  
-for msg in st.session_state.messages:
-  # Display messages
-  
-if input_msg := st.text_input("You:", key="input"): 
-  st.session_state.messages.append(HumanMessage(input_msg))
 
-  response = agent_executor({"input": input_msg, "chat_history": st.session_state.messages})
+# Create columns for chat history and input  
+history_col, input_col = st.columns([5,1]) 
+
+with history_col:
+  # Loop through messages
+  for msg in st.session_state.messages:
+    # Check type of message
+    if isinstance(msg, AIMessage):
+      st.text_area("Assistant:", value=msg.content, height=50, disabled=True)
+    elif isinstance(msg, HumanMessage):
+      st.text_area("You:", value=msg.content, height=50, disabled=True)
+
+with input_col:
+  input_msg = st.text_input("You:", key="input")
   
-  st.session_state.messages.append(AIMessage(response["output"]))
-  
-  st_callback = StreamlitCallbackHandler(st.empty())
-  # Display response
+  if input_msg:
+    st.session_state.messages.append(HumanMessage(input_msg)) 
+
+    response = agent_executor({"input": input_msg, 
+                               "chat_history": st.session_state.messages})
+                               
+    st.session_state.messages.append(AIMessage(response["output"]))
+    
+    # Print assistant response
+    st.text_area("Assistant:", value=response["output"], height=50)
