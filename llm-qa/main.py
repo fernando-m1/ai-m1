@@ -206,6 +206,9 @@ for msg in st.session_state.messages:
 if prompt := st.chat_input(placeholder=starter_message):
     st.chat_message("user").write(prompt)
     
+    # Store the HumanMessage in the session state
+    st.session_state.messages.append(HumanMessage(prompt))
+    
     # Concatenate history and input
     full_input = "\n".join([msg.content for msg in st.session_state.messages] + [prompt])
     
@@ -215,7 +218,8 @@ if prompt := st.chat_input(placeholder=starter_message):
     )
     response_content = response["output"]
     
-  # Escape the $ character
+    # Escape the $ character
     response_content = response_content.replace("$", "\$")
+    
     st.session_state.messages.append(AIMessage(content=response_content))
     st.chat_message("assistant").write(response_content)
