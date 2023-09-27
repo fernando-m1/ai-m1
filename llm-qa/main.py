@@ -22,7 +22,7 @@ from typing import Any, Iterator, List
 st.set_page_config(page_title="MoradaUno Chatbot", page_icon="🤖")
 
 # Load the custom CSS
-with open("styles.css", "r") as f:
+with open("llm-qa/styles.css", "r") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # Define functions
