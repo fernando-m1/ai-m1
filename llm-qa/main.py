@@ -200,7 +200,6 @@ agent_executor = AgentExecutor(
 
 # Streamlit interface
 starter_message = "¡Pregúntame sobre Morada Uno! Estoy para resolver tus dudas sobre nuestros servicios."
-
 if "messages" not in st.session_state or st.sidebar.button("Clear message history"):
     st.session_state["messages"] = [AIMessage(content=starter_message)]
 
@@ -211,6 +210,9 @@ for msg in st.session_state.messages:
         st.chat_message("user").write(msg.content)
 
 if prompt := st.chat_input(placeholder=starter_message):
+    st.chat_message("user").write(prompt)
+    
+    # Store the HumanMessage in the session state
     st.session_state.messages.append(HumanMessage(content=prompt))
     
     # Concatenate history and input
@@ -221,5 +223,9 @@ if prompt := st.chat_input(placeholder=starter_message):
         include_run_info=True,
     )
     response_content = response["output"]
+    
+    # Escape the $ character
+    response_content = response_content.replace("$", "\$")
+    
     st.session_state.messages.append(AIMessage(content=response_content))
     st.chat_message("assistant").write(response_content)
