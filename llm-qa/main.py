@@ -6,7 +6,6 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain, LLMChain, create_qa_with_sources_chain
 from langchain.chains.combine_documents.stuff import StuffDocumentsChain
 from langchain.document_loaders import DirectoryLoader, UnstructuredMarkdownLoader, GCSDirectoryLoader
-# from langchain.document_transformers import Html2TextTransformer
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import MessagesPlaceholder, PromptTemplate
@@ -210,7 +209,7 @@ if "messages" not in st.session_state or st.sidebar.button("Clear message histor
 for msg in st.session_state.messages:
     if isinstance(msg, AIMessage):
         with st.container():
-            st.image(img, width=40, use_column_width=False, clamp=False, channels="RGB", caption="", key=None)
+            st.image(img, width=40, use_column_width=False, clamp=False, channels="RGB", caption="")
             st.markdown(f"<div class='assistant-message'><div class='message-bubble'>{msg.content}</div></div>", unsafe_allow_html=True)
     elif isinstance(msg, HumanMessage):
         st.markdown(f"<div class='user-message'><div class='message-bubble'>{msg.content}</div></div>", unsafe_allow_html=True)
