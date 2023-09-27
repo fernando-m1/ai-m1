@@ -205,8 +205,12 @@ for msg in st.session_state.messages:
 
 if prompt := st.chat_input(placeholder=starter_message):
     st.chat_message("user").write(prompt)
+    
+    # Concatenate history and input
+    full_input = "\n".join([msg.content for msg in st.session_state.messages] + [prompt])
+    
     response = agent_executor(
-        {"input": prompt, "history": st.session_state.messages},
+        {"input": full_input},
         include_run_info=True,
     )
     response_content = response["output"]
