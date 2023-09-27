@@ -17,6 +17,9 @@ from langchain.vectorstores.faiss import FAISS
 from langchain.agents.openai_functions_agent.agent_token_buffer_memory import AgentTokenBufferMemory
 
 from typing import Any, Iterator, List
+import requests
+from PIL import Image
+from io import BytesIO
 
 # Streamlit page config
 st.set_page_config(page_title="MoradaUno Chatbot", page_icon="🤖")
@@ -24,6 +27,9 @@ st.set_page_config(page_title="MoradaUno Chatbot", page_icon="🤖")
 # Load the custom CSS
 with open("llm-qa/styles.css", "r") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+response_img = requests.get("https://github.com/fernando-m1/ai-m1/raw/main/llm-qa/M1-icon-full-color%402x.png")
+img = Image.open(BytesIO(response_img.content))
 
 # Define functions
 def text_splitter():
@@ -204,7 +210,7 @@ if "messages" not in st.session_state or st.sidebar.button("Clear message histor
 for msg in st.session_state.messages:
     if isinstance(msg, AIMessage):
         with st.container():
-            st.image("path_to_your_company_icon.png", width=40, format="PNG", use_container_width=False, output_format="auto", clamp=False, channels="RGB", caption="", start_time=None, end_time=None, key=None, use_column_width=False)
+            st.image(img, width=40, use_column_width=False, clamp=False, channels="RGB", caption="", key=None)
             st.markdown(f"<div class='assistant-message'><div class='message-bubble'>{msg.content}</div></div>", unsafe_allow_html=True)
     elif isinstance(msg, HumanMessage):
         st.markdown(f"<div class='user-message'><div class='message-bubble'>{msg.content}</div></div>", unsafe_allow_html=True)
