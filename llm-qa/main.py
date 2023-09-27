@@ -214,5 +214,8 @@ if prompt := st.chat_input(placeholder=starter_message):
         include_run_info=True,
     )
     response_content = response["output"]
+    
+  # Escape the $ character
+    response_content = response_content.replace("$", "\$")
     st.session_state.messages.append(AIMessage(content=response_content))
     st.chat_message("assistant").write(response_content)
