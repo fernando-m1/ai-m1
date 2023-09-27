@@ -113,12 +113,19 @@ def create_retriever(loader: Any, top_k_results: int) -> VectorStoreRetriever:
 
 # Load products files and create a retriever of products.
 moradauno_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus-demo")
-product_retriever = create_retriever(moradauno_loader, 5)
+st.write(moradauno_loader)
+st.write("--------------")
+moradauno_retriever = create_retriever(moradauno_loader, 5)
+st.write(moradauno_retriever)
+st.write("--------------")
 
 # Load products files and create a retriever of products.
 products_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus-demo", prefix="Productos/")
+st.write(products_loader)
+st.write("--------------")
 product_retriever = create_retriever(products_loader, 3)
-
+st.write(products_retriever)
+st.write("--------------")
 
 # Define the input and output structure using Pydantic
 class CalculatorInput(BaseModel):
