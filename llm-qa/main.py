@@ -206,6 +206,19 @@ starter_message = "¡Pregúntame sobre Morada Uno! Estoy para resolver tus dudas
 if "messages" not in st.session_state or st.sidebar.button("Clear message history"):
     st.session_state["messages"] = [AIMessage(content=starter_message)]
 
+# Render the chat bubbles using custom HTML
+for chat in st.session_state.messages:
+    origin = "ai" if isinstance(chat, AIMessage) else "human"
+    div = f"""
+    <div class="chat-row {'row-reverse' if origin == 'human' else ''}">
+        <img class="chat-icon" src="{'llm-qa/user_icon.png' if origin == 'ai' else 'llm-qa/M1-icon-full-color%402x.png'}" width=32 height=32>
+        <div class="chat-bubble {'ai-bubble' if origin == 'ai' else 'human-bubble'}">
+            &#8203;{chat.content}
+        </div>
+    </div>
+    """
+    st.markdown(div, unsafe_allow_html=True)
+
 for msg in st.session_state.messages:
     if isinstance(msg, AIMessage):
         with st.container():
