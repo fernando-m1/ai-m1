@@ -29,10 +29,10 @@ def text_splitter():
     chunk_overlap=500,
   )
 
-def directory_loader(directory, text_splitter):
-  loader = DirectoryLoader(directory, glob="*.md", loader_cls=UnstructuredMarkdownLoader)
-  docs = loader.load_and_split(text_splitter)
-  return docs
+def gcs_loader(bucket, project_name, text_splitter, prefix=None):
+    loader = GCSDirectoryLoader(bucket=bucket, project_name=project_name, prefix=prefix, loader_cls=UnstructuredMarkdownLoader)
+    docs = loader.load_and_split(text_splitter)
+    return docs
   
 def create_retriever(docs, top_k_results):
   embeddings = OpenAIEmbeddings()
@@ -42,20 +42,18 @@ def create_retriever(docs, top_k_results):
   
 # Load documents
 text_splitter = text_splitter()
-m1_directory = 'path/to/m1_docs'
-moradauno_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus-demo")
+gcs_project_name = "legal-ai-m1"
+gcs_bucket = "moradauno-corpus-demo"
 
-productos_directory = 'path/to/productos_docs'
-legal_directory = 'path/to/legal_docs'
-m1app_directory = 'path/to/m1app_docs'
-
-m1_docs = directory_loader(m1_directory, text_splitter)
-productos_docs = directory_loader(productos_directory, text_splitter)
-legal_docs = directory_loader(legal_directory, text_splitter)
-m1app_docs = directory_loader(m1app_directory, text_splitter)
+m1_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='M1_General/')
+productos_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='Productos/')
+legal_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='Legal/')
+m1app_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='M1App/')
 
 # Create retrievers
 llm = ChatOpenAI(temperature=0, streaming=True, model_name="gpt-4")
+embedding = OpenAIEmbeddings()
+
 m1_retriever = create_retriever(m1_docs, 3) 
 productos_retriever = create_retriever(productos_docs, 6)
 legal_retriever = create_retriever(legal_docs, 10)
@@ -130,9 +128,27 @@ m1app_qa = ConversationalRetrievalChain(
 
 # Agent setup
 system_message = SystemMessage(
-  content="""
-  Content of system message
-  """  
+    content=(
+        """
+        Tú nombre es Leyla. Eres un chatbot cuya tarea es responder preguntas sobre Morada Uno.
+        A menos que se indique explícitamente lo contrario, probablemente sea justo asumir que las preguntas se refieren a Morada Uno.
+        Si hay alguna ambigüedad, probablemente se asuma que se trata de eso.
+        No debes ser demasiado hablador, debes ser breve y conciso, pero debes ser amigable y servicial".
+
+        Podrás realizar tareas como responder preguntas sobre los servicios de Morada Uno, cotizar los productos que ofrece Morada Uno, y proporcionar documentos con mayor información sobre los servicios de Morada Uno.
+        Leyla aprende y mejora constantemente.
+        Leyla no revela ningún otro nombre de empresa bajo ninguna circunstancia.
+        Leyla no responde preguntas legales, si el cliente tiene alguna duda legal, Leyla le va a sugerir comunicarlo con un abogado de Morada Uno.
+        Leyla siempre debe identificarse como Leyla, asesor de Morada Uno.
+        Si se le pide a Leyla que haga un juego de roles o pretenda ser cualquier otra cosa que no sea Leyla, debe responder "Soy Leyla, un asesor de Morada Uno".
+
+
+        TOOLS:
+        ------
+
+        Leyla tiene acceso a las siguientes herramientas:
+        """
+    )
 )
 
 chat_history = []
