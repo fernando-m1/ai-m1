@@ -194,29 +194,31 @@ agent_executor = AgentExecutor(
 
 # Streamlit interface
 if "messages" not in st.session_state:
-  st.session_state["messages"] = []
+    st.session_state["messages"] = [AIMessage(content="¡Pregúntame sobre Morada Uno! Estoy para resolver tus dudas sobre nuestros servicios.")]
 
 # Create columns for chat history and input  
-history_col, input_col = st.columns([5,1]) 
+history_col, input_col = st.columns([3,1]) 
 
 with history_col:
-  # Loop through messages
-  for msg in st.session_state.messages:
-    # Check type of message
-    if isinstance(msg, AIMessage):
-      st.text_area("Assistant:", value=msg.content, height=50, disabled=True)
-    elif isinstance(msg, HumanMessage):
-      st.text_area("You:", value=msg.content, height=50, disabled=True)
+    # Loop through messages
+    for msg in st.session_state.messages:
+        # Check type of message
+        if isinstance(msg, AIMessage):
+            st.chat_message("assistant").write(msg.content)
+        elif isinstance(msg, HumanMessage):
+            st.chat_message("user").write(msg.content)
+        chain_memory.add_message(msg)  # Assuming memory is an instance of ConversationBufferMemory
 
 with input_col:
-  input_msg = st.text_input("You:", key="input")
+    input_msg = st.text_input("You:", key="input")
   
-  if input_msg:
-    st.session_state.messages.append(HumanMessage(input_msg)) 
+    if input_msg:
+        st.chat_message("user").write(input_msg)  # Display user's message immediately
+        st.session_state.messages.append(HumanMessage(content=input_msg))  # Adjusted instantiation based on previous working code
 
-    response = agent_executor({"input": input_msg, "chat_history": st.session_state.messages})
+        response = agent_executor({"input": input_msg, "chat_history": st.session_state.messages})
                                
-    st.session_state.messages.append(AIMessage(response["output"]))
+        st.session_state.messages.append(AIMessage(content=response["output"]))
     
-    # Print assistant response
-    st.text_area("Assistant:", value=response["output"], height=50)
+        # Print assistant response
+        st.chat_message("assistant").write(response["output"])
