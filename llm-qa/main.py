@@ -193,32 +193,24 @@ agent_executor = AgentExecutor(
 )
 
 # Streamlit interface
-if "messages" not in st.session_state:
-    st.session_state["messages"] = [AIMessage(content="¡Pregúntame sobre Morada Uno! Estoy para resolver tus dudas sobre nuestros servicios.")]
+starter_message = "¡Pregúntame sobre Morada Uno! Estoy para resolver tus dudas sobre nuestros servicios."
+if "messages" not in st.session_state or st.sidebar.button("Clear message history"):
+    st.session_state["messages"] = [AIMessage(content=starter_message)]
 
-# Create columns for chat history and input  
-history_col, input_col = st.columns([3,1]) 
+for msg in st.session_state.messages:
+    if isinstance(msg, AIMessage):
+        st.chat_message("assistant").write(msg.content)
+    elif isinstance(msg, HumanMessage):
+        st.chat_message("user").write(msg.content)
+        chain_memory.save_context({"input": msg.content}, {})  # Save user's message to memory
 
-with history_col:
-    # Loop through messages
-    for msg in st.session_state.messages:
-        # Check type of message
-        if isinstance(msg, AIMessage):
-            st.chat_message("assistant").write(msg.content)
-        elif isinstance(msg, HumanMessage):
-            st.chat_message("user").write(msg.content)
-        chain_memory.add_message(msg)  # Assuming memory is an instance of ConversationBufferMemory
-
-with input_col:
-    input_msg = st.text_input("You:", key="input")
-  
-    if input_msg:
-        st.chat_message("user").write(input_msg)  # Display user's message immediately
-        st.session_state.messages.append(HumanMessage(content=input_msg))  # Adjusted instantiation based on previous working code
-
-        response = agent_executor({"input": input_msg, "chat_history": st.session_state.messages})
-                               
-        st.session_state.messages.append(AIMessage(content=response["output"]))
-    
-        # Print assistant response
-        st.chat_message("assistant").write(response["output"])
+if prompt := st.chat_input(placeholder=starter_message):
+    st.chat_message("user").write(prompt)
+    response = agent_executor(
+        {"input": prompt, "history": st.session_state.messages},
+        include_run_info=True,
+    )
+    response_content = response["output"]
+    st.session_state.messages.append(AIMessage(content=response_content))
+    st.chat_message("assistant").write(response_content)
+    chain_memory.save_context({}, {"output": response_content})  # Save chatbot's response to memory
