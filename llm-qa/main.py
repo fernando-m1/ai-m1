@@ -207,7 +207,7 @@ if prompt := st.chat_input(placeholder=starter_message):
     st.chat_message("user").write(prompt)
     
     # Store the HumanMessage in the session state
-    st.session_state.messages.append(HumanMessage(prompt))
+    st.session_state.messages.append(HumanMessage(content=prompt))
     
     # Concatenate history and input
     full_input = "\n".join([msg.content for msg in st.session_state.messages] + [prompt])
