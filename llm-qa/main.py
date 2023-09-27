@@ -30,7 +30,7 @@ def text_splitter():
   )
 
 def gcs_loader(bucket, project_name, text_splitter, prefix=None):
-    loader = GCSDirectoryLoader(bucket=bucket, project_name=project_name, prefix=prefix, loader_func=lambda x: UnstructuredMarkdownLoader(x, mode=”single”))
+    loader = GCSDirectoryLoader(bucket=bucket, project_name=project_name, prefix=prefix, loader_func=UnstructuredMarkdownLoader)
     docs = loader.load_and_split(text_splitter)
     return docs
   
