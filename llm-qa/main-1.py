@@ -42,7 +42,9 @@ def create_retriever(docs, top_k_results):
   
 # Load documents
 text_splitter = text_splitter()
-m1_directory = 'path/to/m1_docs' 
+m1_directory = 'path/to/m1_docs'
+moradauno_loader = GCSDirectoryLoader(project_name="legal-ai-m1", bucket="moradauno-corpus-demo")
+
 productos_directory = 'path/to/productos_docs'
 legal_directory = 'path/to/legal_docs'
 m1app_directory = 'path/to/m1app_docs'
