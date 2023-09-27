@@ -1,0 +1,38 @@
+/* General chat styles */
+.chat-container {
+    overflow-y: auto;
+    max-height: 500px; /* Adjust this value based on your desired chat height */
+}
+
+/* Message bubbles */
+.message-bubble {
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    clear: both;
+}
+
+/* User messages */
+.user-message .message-bubble {
+    background-color: #e6e6e6;
+    float: right;
+}
+
+/* Assistant messages */
+.assistant-message .message-bubble {
+    background-color: #4CAF50;
+    color: white;
+    float: left;
+}
+
+/* Assistant avatar */
+.assistant-avatar {
+    width: 40px;
+    height: 40px;
+    background-image: url('path_to_your_company_icon.png'); /* Replace with the path to your company's icon */
+    background-size: cover;
+    border-radius: 50%;
+    float: left;
+    margin-right: 10px;
+}
