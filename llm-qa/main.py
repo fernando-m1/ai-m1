@@ -23,10 +23,7 @@ from io import BytesIO
 # Streamlit page config
 st.set_page_config(page_title="MoradaUno Chatbot", page_icon="🤖")
 
-# Load the custom CSS
-with open("llm-qa/styles.css", "r") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
+# Load M1 image
 response_img = requests.get("https://github.com/fernando-m1/ai-m1/raw/main/llm-qa/M1-icon-whiteborder.png")
 img = Image.open(BytesIO(response_img.content))
 
@@ -203,34 +200,17 @@ agent_executor = AgentExecutor(
 
 # Streamlit interface
 starter_message = "¡Pregúntame sobre Morada Uno! Estoy para resolver tus dudas sobre nuestros servicios."
+
 if "messages" not in st.session_state or st.sidebar.button("Clear message history"):
     st.session_state["messages"] = [AIMessage(content=starter_message)]
 
-# Render the chat bubbles using custom HTML
-for chat in st.session_state.messages:
-    origin = "ai" if isinstance(chat, AIMessage) else "human"
-    div = f"""
-    <div class="chat-row {'row-reverse' if origin == 'human' else ''}">
-        <img class="chat-icon" src="{'llm-qa/user_icon.png' if origin == 'ai' else 'llm-qa/M1-icon-whiteborder.png'}" width=32 height=32>
-        <div class="chat-bubble {'ai-bubble' if origin == 'ai' else 'human-bubble'}">
-            &#8203;{chat.content}
-        </div>
-    </div>
-    """
-    st.markdown(div, unsafe_allow_html=True)
-
 for msg in st.session_state.messages:
     if isinstance(msg, AIMessage):
-        with st.container():
-            st.image(img, width=40, use_column_width=False, clamp=False, channels="RGB", caption="")
-            st.markdown(f"<div class='assistant-message'><div class='message-bubble'>{msg.content}</div></div>", unsafe_allow_html=True)
+        st.chat_message("assistant").write(msg.content)
     elif isinstance(msg, HumanMessage):
-        st.markdown(f"<div class='user-message'><div class='message-bubble'>{msg.content}</div></div>", unsafe_allow_html=True)
+        st.chat_message("user").write(msg.content)
 
 if prompt := st.chat_input(placeholder=starter_message):
-    st.chat_message("user").write(prompt)
-    
-    # Store the HumanMessage in the session state
     st.session_state.messages.append(HumanMessage(content=prompt))
     
     # Concatenate history and input
@@ -241,9 +221,5 @@ if prompt := st.chat_input(placeholder=starter_message):
         include_run_info=True,
     )
     response_content = response["output"]
-    
-    # Escape the $ character
-    response_content = response_content.replace("$", "\$")
-    
     st.session_state.messages.append(AIMessage(content=response_content))
     st.chat_message("assistant").write(response_content)
