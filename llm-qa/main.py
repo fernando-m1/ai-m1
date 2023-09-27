@@ -6,7 +6,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain, LLMChain, create_qa_with_sources_chain
 from langchain.chains.combine_documents.stuff import StuffDocumentsChain
 from langchain.document_loaders import DirectoryLoader, UnstructuredMarkdownLoader, GCSDirectoryLoader
-from langchain.document_transformers import Html2TextTransformer
+# from langchain.document_transformers import Html2TextTransformer
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import MessagesPlaceholder, PromptTemplate
