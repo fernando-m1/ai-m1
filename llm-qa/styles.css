@@ -30,7 +30,7 @@
 .assistant-avatar {
     width: 40px;
     height: 40px;
-    background-image: url('path_to_your_company_icon.png'); /* Replace with the path to your company's icon */
+    background-image: url('https://github.com/fernando-m1/ai-m1/blob/f970be37cf1eb9088a46837226e327eb1c719ca8/llm-qa/M1-icon-full-color%402x.png');
     background-size: cover;
     border-radius: 50%;
     float: left;
