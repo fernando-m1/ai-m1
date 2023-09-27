@@ -202,7 +202,6 @@ for msg in st.session_state.messages:
         st.chat_message("assistant").write(msg.content)
     elif isinstance(msg, HumanMessage):
         st.chat_message("user").write(msg.content)
-        chain_memory.save_context({"input": msg.content}, {})  # Save user's message to memory
 
 if prompt := st.chat_input(placeholder=starter_message):
     st.chat_message("user").write(prompt)
@@ -213,4 +212,3 @@ if prompt := st.chat_input(placeholder=starter_message):
     response_content = response["output"]
     st.session_state.messages.append(AIMessage(content=response_content))
     st.chat_message("assistant").write(response_content)
-    chain_memory.save_context({}, {"output": response_content})  # Save chatbot's response to memory
