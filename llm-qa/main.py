@@ -214,8 +214,7 @@ with input_col:
   if input_msg:
     st.session_state.messages.append(HumanMessage(input_msg)) 
 
-    response = agent_executor({"input": input_msg, 
-                               "chat_history": st.session_state.messages})
+    response = agent_executor({"input": input_msg, "chat_history": st.session_state.messages})
                                
     st.session_state.messages.append(AIMessage(response["output"]))
     
