@@ -27,7 +27,7 @@ st.set_page_config(page_title="MoradaUno Chatbot", page_icon="🤖")
 with open("llm-qa/styles.css", "r") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-response_img = requests.get("https://github.com/fernando-m1/ai-m1/raw/main/llm-qa/M1-icon-full-color%402x.png")
+response_img = requests.get("https://github.com/fernando-m1/ai-m1/raw/main/llm-qa/M1-icon-whiteborder.png")
 img = Image.open(BytesIO(response_img.content))
 
 # Define functions
@@ -211,7 +211,7 @@ for chat in st.session_state.messages:
     origin = "ai" if isinstance(chat, AIMessage) else "human"
     div = f"""
     <div class="chat-row {'row-reverse' if origin == 'human' else ''}">
-        <img class="chat-icon" src="{'llm-qa/user_icon.png' if origin == 'ai' else 'llm-qa/M1-icon-full-color%402x.png'}" width=32 height=32>
+        <img class="chat-icon" src="{'llm-qa/user_icon.png' if origin == 'ai' else 'llm-qa/M1-icon-whiteborder.png'}" width=32 height=32>
         <div class="chat-bubble {'ai-bubble' if origin == 'ai' else 'human-bubble'}">
             &#8203;{chat.content}
         </div>
