@@ -1,9 +1,9 @@
 langchain
 streamlit
-bs4
-html2text
 openai
 tiktoken
 faiss-cpu
 google-cloud-storage
 unstructured[all-docs]
+requests
+Pillow
