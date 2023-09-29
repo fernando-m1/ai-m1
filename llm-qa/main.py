@@ -103,11 +103,8 @@ javascript_code = """
     """
 
 # import and reference the external HTML and CSS style and JavaScript script files
-
 st.markdown('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">', unsafe_allow_html=True)
 st.markdown(html_code, unsafe_allow_html=True)
-st.markdown(css_code, unsafe_allow_html=True)
-st.markdown(javascript_code, unsafe_allow_html=True)
 
 # Page title
 st.title("MoradaUno Chatbot 🤖")
@@ -318,3 +315,6 @@ if prompt := st.chat_input(placeholder=starter_message):
     
     st.session_state.messages.append(AIMessage(content=response_content))
     st.chat_message("assistant", avatar=img).write(response_content)
+
+
+st.markdown(javascript_code, unsafe_allow_html=True)
