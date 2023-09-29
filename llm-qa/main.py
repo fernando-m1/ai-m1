@@ -72,29 +72,30 @@ css_code = """
     """
 
 html_code = """
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #FFFFFF;">
-      <a class="navbar-brand" href="/">MoradaUno</a>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #FAFAFA; height: 60px; padding: 10px 0;">
+      <a class="navbar-brand" href="/" style="color: #671e75;">MoradaUno</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <a class="nav-link" href="https://www.moradauno.com.mx/">Inmobiliarios</a>
+            <a class="nav-link" href="https://www.moradauno.com.mx/" style="color: #671e75;">Inmobiliarios</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://www.moradauno.com.mx/propietarios">Propietarios</a>
+            <a class="nav-link" href="https://www.moradauno.com.mx/propietarios" style="color: #671e75;">Propietarios</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://www.moradauno.com.mx/sobre-nosotros">Sobre nosotros</a>
+            <a class="nav-link" href="https://www.moradauno.com.mx/sobre-nosotros" style="color: #671e75;">Sobre nosotros</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://asesor.moradaunoapp.com/#/app/introduccion" target="_blank">Entrar a la M1App</a>
+            <a class="nav-link" href="https://asesor.moradaunoapp.com/#/app/introduccion" target="_blank" style="color: #671e75;">Entrar a la M1App</a>
           </li>
         </ul>
       </div>
     </nav>
     """
+
 
 javascript_code = """
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
