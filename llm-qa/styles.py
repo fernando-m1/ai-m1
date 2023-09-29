@@ -1,5 +1,6 @@
 def get_styles():
     return """
+    <style>
         .navbar-wrapper-3 {
             width: auto;
             justify-content: space-between;
@@ -22,4 +23,5 @@ def get_styles():
             -webkit-text-size-adjust: 100%;
             font-family: sans-serif;
         }
+    </style>
     """
