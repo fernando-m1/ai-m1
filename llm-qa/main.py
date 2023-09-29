@@ -1,6 +1,7 @@
 import streamlit as st
 from styles import get_styles
 from html_elements import get_navbar
+from scripts import get_scripts
 
 from langchain.agents import OpenAIFunctionsAgent, AgentExecutor
 from langchain.callbacks import StreamlitCallbackHandler 
@@ -25,9 +26,10 @@ from io import BytesIO
 # Streamlit page config
 st.set_page_config(page_title="MoradaUno Chatbot", page_icon="🤖")
 
-# import and reference the external HTML and CSS style files
+# import and reference the external HTML and CSS style and JavaScript script files
 st.markdown(get_navbar(), unsafe_allow_html=True)
 st.markdown(get_styles(), unsafe_allow_html=True)
+st.markdown(get_scripts(), unsafe_allow_html=True)
 
 # Page title
 st.title("MoradaUno Chatbot 🤖")
