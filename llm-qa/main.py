@@ -57,7 +57,7 @@ legal_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='Leg
 m1app_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='M1App/')
 
 # Create retrievers
-llm = ChatOpenAI(temperature=0, streaming=True, model_name="gpt-4")
+llm = ChatOpenAI(temperature=0, streaming=True, model_name="gpt-3.5-turbo-16k")
 embedding = OpenAIEmbeddings()
 
 m1_retriever = create_retriever(m1_docs, 3) 
