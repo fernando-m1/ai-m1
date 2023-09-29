@@ -23,5 +23,15 @@ def get_styles():
             -webkit-text-size-adjust: 100%;
             font-family: sans-serif;
         }
+
+        /* Add this to change the color of the navbar links */
+        .navbar-dark .navbar-nav .nav-link {
+            color: #671e75;
+        }
+
+        /* If you want to change the color on hover as well */
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #501260;  /* This is a slightly darker shade, adjust as needed */
+        }
     </style>
     """
