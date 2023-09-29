@@ -202,7 +202,7 @@ agent_executor = AgentExecutor(
   agent=agent,
   tools=tools,
   memory=chain_memory,
-  verbose=True,
+  verbose=False,
   return_intermediate_steps=False,
 )
 
