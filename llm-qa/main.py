@@ -27,6 +27,7 @@ from io import BytesIO
 st.set_page_config(page_title="MoradaUno Chatbot", page_icon="🤖")
 
 # import and reference the external HTML and CSS style and JavaScript script files
+st.markdown('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">', unsafe_allow_html=True)
 st.markdown(get_navbar(), unsafe_allow_html=True)
 st.markdown(get_styles(), unsafe_allow_html=True)
 st.markdown(get_scripts(), unsafe_allow_html=True)
