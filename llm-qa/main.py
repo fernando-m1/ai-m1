@@ -55,17 +55,19 @@ css_code = """
         }
 
         /* If you want to change the color on hover as well */
-        .navbar-dark .navbar-nav .nav-link:hover {
-            color: #501260;  /* This is a slightly darker shade, adjust as needed */
+        .navbar-dark .navbar-nav .nav-link {
+            color: #671e75;  /* This is the color you wanted */
         }
 
         /* Positioning of Navbar */
         .navbar {
-            position: fixed;
+            position: fixed !important;
             top: 0;
             width: 100%;
             z-index: 1000;
-        }
+            height: 60px;  /* Adjust this value as needed */
+            padding: 10px 0;  /* This adds 10px padding to the top and bottom */
+}
     </style>
     """
 
