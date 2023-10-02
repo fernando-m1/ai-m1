@@ -23,11 +23,6 @@ from io import BytesIO
 # Streamlit page config
 st.set_page_config(page_title="MoradaUno Chatbot", page_icon="🤖")
 
-st.markdown('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">', unsafe_allow_html=True)
-
-# HTML, CSS and JavaScript
-st.markdown('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">', unsafe_allow_html=True)
-
 # Page title
 st.title("MoradaUno Chatbot 🤖")
 
@@ -203,6 +198,8 @@ agent_executor = AgentExecutor(
   tools=tools,
   memory=chain_memory,
   verbose=False,
+  max_iterations=2,
+  early_stopping_method="generate",
   return_intermediate_steps=False,
 )
 
