@@ -1,4 +1,9 @@
 import streamlit as st
+import os
+import asyncio
+from fastapi import FastAPI, Body
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 
 from langchain.agents import OpenAIFunctionsAgent, AgentExecutor
 from langchain.callbacks import StreamlitCallbackHandler 
@@ -54,45 +59,6 @@ m1app_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='M1A
 # Create retrievers
 llm = ChatOpenAI(temperature=0, model_name="gpt-4", streaming=True, callbacks=[])
 embedding = OpenAIEmbeddings()
-
-class AsyncCallbackHandler(AsyncIteratorCallbackHandler):
-    content: str = ""
-    final_answer: bool = False
-
-    async def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
-        self.content += token
-        # if we passed the final answer, we put tokens in queue
-        if self.final_answer:
-            if '"action_input": "' in self.content:
-                if token not in ['"', "}"]:
-                    self.queue.put_nowait(token)
-        elif "Final Answer" in self.content:
-            self.final_answer = True
-            self.content = ""
-    
-    async def on_llm_end(self, response: LLMResult, **kwargs: Any) -> None:
-        if self.final_answer:
-            self.content = ""
-            self.final_answer = False
-            self.done.set()
-        else:
-            self.content = ""
-
-async def run_call(query: str, stream_it: AsyncCallbackHandler):
-    # assign callback handler
-    agent.agent.llm_chain.llm.callbacks = [stream_it]
-    # now query
-    await agent.acall(inputs={"input": query})
-
-# request input format
-class Query(BaseModel):
-    text: str
-
-async def create_gen(query: str, stream_it: AsyncCallbackHandler):
-    task = asyncio.create_task(run_call(query, stream_it))
-    async for token in stream_it.aiter():
-        yield token
-    await task
 
 m1_retriever = create_retriever(m1_docs, 3) 
 productos_retriever = create_retriever(productos_docs, 6)
@@ -267,9 +233,7 @@ if prompt := st.chat_input(placeholder=starter_message):
     st.chat_message("assistant", avatar=img).write(response_content)
 
 @app.post("/chat")
-async def chat(
-    query: Query = Body(...),
-):
+async def chat(query: Query = Body(...),):
     stream_it = AsyncCallbackHandler()
     gen = create_gen(query.text, stream_it)
     return StreamingResponse(gen, media_type="text/event-stream")
@@ -282,7 +246,7 @@ async def health():
 
 if __name__ == "__fastapi_main__":
     uvicorn.run(
-        "app:app",
+        "app:app",           #Replace the firsr "app" in "app:app" with the name of your Python file.
         host="localhost",
         port=8000,
         reload=True
