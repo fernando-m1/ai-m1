@@ -38,8 +38,8 @@ def text_splitter():
     chunk_overlap=500,
   )
 
-def gcs_loader(bucket, project_name, text_splitter, prefix=None):
-    loader = GCSDirectoryLoader(bucket=bucket, project_name=project_name, prefix=prefix, loader_func=UnstructuredMarkdownLoader)
+def directory_loader(path, text_splitter, prefix=None):
+    loader = DirectoryLoader(path, prefix, loader_func=UnstructuredMarkdownLoader)
     docs = loader.load_and_split(text_splitter)
     return docs
   
@@ -51,13 +51,11 @@ def create_retriever(docs, top_k_results):
   
 # Load documents
 text_splitter = text_splitter()
-gcs_project_name = "legal-ai-m1"
-gcs_bucket = "moradauno-corpus-demo"
 
-m1_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='M1_General/')
-productos_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='Productos/')
-legal_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='Legal/')
-m1app_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='M1App/')
+m1_docs = directory_loader(path, text_splitter, prefix='M1_General/')
+productos_docs = directory_loader(path, text_splitter, prefix='Productos/')
+legal_docs = directory_loader(path, text_splitter, prefix='Legal/')
+m1app_docs = directory_loader(path, text_splitter, prefix='M1App/')
 
 # Create retrievers
 llm = ChatOpenAI(temperature=0, streaming=True, model_name="gpt-4")
