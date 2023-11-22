@@ -38,8 +38,8 @@ def text_splitter():
     chunk_overlap=500,
   )
 
-def directory_loader(path, text_splitter, prefix=None):
-    loader = DirectoryLoader(path, prefix, loader_func=UnstructuredMarkdownLoader)
+def gcs_loader(bucket, project_name, text_splitter, prefix=None):
+    loader = GCSDirectoryLoader(path, prefix, loader_func=UnstructuredMarkdownLoader)
     docs = loader.load_and_split(text_splitter)
     return docs
   
@@ -48,23 +48,16 @@ def create_retriever(docs, top_k_results):
   vectorstore = FAISS.from_documents(docs, embeddings)
   retriever = vectorstore.as_retriever(search_kwargs={"k": top_k_results})
   return retriever
-  
+
 # Load documents
 text_splitter = text_splitter()
+gcs_project_name = "legal-ai-m1"
+gcs_bucket = "moradauno-corpus-demo"
 
-m1_docs = directory_loader(path, text_splitter, prefix='M1_General/')
-productos_docs = directory_loader(path, text_splitter, prefix='Productos/')
-legal_docs = directory_loader(path, text_splitter, prefix='Legal/')
-m1app_docs = directory_loader(path, text_splitter, prefix='M1App/')
-
-# Create retrievers
-llm = ChatOpenAI(temperature=0, streaming=True, model_name="gpt-4")
-embedding = OpenAIEmbeddings()
-
-m1_retriever = create_retriever(m1_docs, 3) 
-productos_retriever = create_retriever(productos_docs, 6)
-legal_retriever = create_retriever(legal_docs, 10)
-m1app_retriever = create_retriever(m1app_docs, 5)
+m1_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='M1_General/')
+productos_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='Productos/')
+legal_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='Legal/')
+m1app_docs = gcs_loader(gcs_bucket, gcs_project_name, text_splitter, prefix='M1App/')
 
 # Define chains
 chain_memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
